@@ -1,0 +1,25 @@
+name: Python Linting
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    name: Python Linting
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Python Deps
+      run: python3 -m pip install flake8
+
+    - name: Lint Frozen Modules
+      shell: bash
+      run: |
+        python3 -m flake8 --show-source --ignore E501 modules/py_frozen
+
+    - name: Lint Filesystem
+      shell: bash
+      run: |
+        python3 -m flake8 --show-source --ignore E501 modules/py_littlefs
