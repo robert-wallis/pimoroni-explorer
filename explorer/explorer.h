@@ -9,19 +9,17 @@
 //       SHOULD ONLY CONSIST OF PREPROCESSOR DIRECTIVES
 // -----------------------------------------------------
 
-// This header may be included by other board headers as "boards/pimoroni_pga2350.h"
+// This header may be included by other board headers as "boards/explorer.h"
 
 // pico_cmake_set PICO_PLATFORM=rp2350
 
-#ifndef _BOARDS_PIMORONI_PGA2350_H
-#define _BOARDS_PIMORONI_PGA2350_H
+#ifndef _BOARDS_PIMORONI_EXPLORER_H
+#define _BOARDS_PIMORONI_EXPLORER_H
 
 // For board detection
-#define PIMORONI_PGA2350
-#define PIMORONI_PGA2350_16MB
+#define PIMORONI_EXPLORER
 
 // --- BOARD SPECIFIC ---
-#define PIMORONI_PGA2350_PSRAM_CS_PIN 47
 
 // --- UART ---
 #ifndef PICO_DEFAULT_UART
