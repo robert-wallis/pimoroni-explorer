@@ -38,6 +38,12 @@ include(adcfft/micropython)
 # LEDs & Matrices
 include(plasma/micropython)
 
+# Servos & Motors
+include(pwm/micropython)
+include(servo/micropython)
+include(encoder/micropython)
+include(motor/micropython)
+
 # ULAB
 include(micropython-common-ulab)
 enable_ulab()

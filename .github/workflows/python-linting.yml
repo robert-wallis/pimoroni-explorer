@@ -7,19 +7,19 @@ on:
 jobs:
   build:
     name: Python Linting
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
 
     - name: Install Python Deps
-      run: python3 -m pip install flake8
+      run: python3 -m pip install ruff
 
     - name: Lint Frozen Modules
       shell: bash
       run: |
-        python3 -m flake8 --show-source --ignore E501 modules/py_frozen
+        python3 -m ruff check --show-source --ignore E501 modules/py_frozen
 
-    - name: Lint Filesystem
+    - name: Lint Examples
       shell: bash
       run: |
-        python3 -m flake8 --show-source --ignore E501 modules/py_littlefs
+        python3 -m ruff check --show-source --ignore E501 examples
