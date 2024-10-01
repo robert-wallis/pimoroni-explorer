@@ -43,7 +43,7 @@ NUM_SERVOS = 4
 NUM_SWITCHES = 6
 
 
-class Explorer2350():
+class PimoroniExplorer():
     SWITCH_A_PIN = 16
     SWITCH_B_PIN = 15
     SWITCH_C_PIN = 14
@@ -96,11 +96,13 @@ class Explorer2350():
         self.i2c = PimoroniI2C(self.I2C_SDA_PIN, self.I2C_SCL_PIN, 100000)
 
         # Set up the amp enable
-        self.__amp_en = Pin(self.AMP_EN_PIN, Pin.OUT)
-        self.__amp_en.off()
+        self._amp_en = Pin(self.AMP_EN_PIN, Pin.OUT)
+        self._amp_en.off()
 
         self.audio_pwm = PWM(Pin(self.PWM_AUDIO_PIN))
-        self.__volume = self.DEFAULT_VOLUME
+        self._volume = self.DEFAULT_VOLUME
+        
+        
 
     def play_tone(self, frequency):
         try:
@@ -109,32 +111,29 @@ class Explorer2350():
             self.play_silence()
             raise ValueError("frequency of range. Expected greater than 0")
 
-        corrected_volume = (self.__volume ** 4)  # Correct for RC Filter curve
+        corrected_volume = (self._volume ** 4)  # Correct for RC Filter curve
         self.audio_pwm.duty_u16(int(32768 * corrected_volume))
-        self.unmute_audio()
+        self.mute_audio(False)
 
     def play_silence(self):
         self.audio_pwm.freq(44100)
 
-        corrected_volume = (self.__volume ** 4)  # Correct for RC Filter curve
+        corrected_volume = (self._volume ** 4)  # Correct for RC Filter curve
         self.audio_pwm.duty_u16(int(32768 * corrected_volume))
-        self.unmute_audio()
+        self.mute_audio(False)
 
     def stop_playing(self):
         self.audio_pwm.duty_u16(0)
-        self.mute_audio()
+        self.mute_audio(True)
 
-    def volume(self, volume=None):
+    def set_volume(self, volume=None):
         if volume is None:
-            return self.__volume
+            return self._volume
 
         if volume < 0.01 or volume > 1.0:
             raise ValueError("volume out of range. Expected 0.0 to 1.0")
 
-        self.__volume = volume
+        self._volume = volume
 
-    def mute_audio(self):
-        self.__amp_en.off()
-
-    def unmute_audio(self):
-        self.__amp_en.on()
+    def mute_audio(self, value=True):
+        self._amp_en.off() if value else self._amp_en.on()
