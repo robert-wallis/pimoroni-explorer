@@ -2,6 +2,7 @@
 # We're using a RAM intensive 64K colour palette here to get a nice smooth colour transition.
 
 import time
+import math
 from picographics import PicoGraphics, DISPLAY_EXPLORER, PEN_RGB565
 
 display = PicoGraphics(display=DISPLAY_EXPLORER, pen_type=PEN_RGB565)
@@ -39,13 +40,16 @@ h = 0
 
 while True:
     h += 1
+    t = time.ticks_ms() / (5 * 1000)
+    bounce_y = int(120 + math.sin(t * 2 + h) * 3)
+
     r, g, b = [int(255 * c) for c in hsv_to_rgb(h / 360.0, 1.0, 1.0)]  # rainbow magic
     RAINBOW = display.create_pen(r, g, b)  # Create pen with converted HSV value
     display.set_pen(RAINBOW)  # Set pen
     display.clear()           # Fill the screen with the colour
     display.set_pen(BLACK)    # Set pen to black
-    display.text("pico disco!", 10, 10, 240, 6)  # Add some text
-    display.text("\\o/ \\o/ \\o/ \\o/ \\o/ \\o/ \\o/ \\o/ \\o/", 25, 120, 240, 4)  # and some more text
-    display.text("oontz oontz oontz", 25, 220, 240, 2)  # and a bit more tiny text
+    display.text("pico disco!", 60, 10, 240, 6)  # Add some text
+    display.text("\\o/ \\o/ \\o/ \\o/ \\o/ \\o/ \\o/ \\o/ \\o/", 55, bounce_y, 240, 4)  # and some more text
+    display.text("oontz oontz oontz", 60, 220, 240, 2)  # and a bit more tiny text
     display.update()          # Update the display
     time.sleep(1.0 / 60)
