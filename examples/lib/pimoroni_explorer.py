@@ -3,6 +3,9 @@ from machine import Pin, PWM
 from pimoroni_i2c import PimoroniI2C
 from servo import Servo
 from picographics import PicoGraphics, DISPLAY_EXPLORER
+from micropython import const
+
+display = PicoGraphics(display=DISPLAY_EXPLORER)
 
 # IO Pin Constants
 GP0 = 0
@@ -21,7 +24,6 @@ A5 = 45
 
 GPIOS = (GP0, GP1, GP2, GP3, GP4, GP5, A0, A1, A2, A3, A4, A5)
 ADCS = (A0, A1, A2, A3, A4, A5)
-
 
 # Index Constants
 SERVO_1 = 0
@@ -42,67 +44,82 @@ NUM_ADCS = 6
 NUM_SERVOS = 4
 NUM_SWITCHES = 6
 
+# Colours!
+WHITE = display.create_pen(255, 255, 255)
+BLACK = display.create_pen(0, 0, 0)
+CYAN = display.create_pen(0, 255, 255)
+MAGENTA = display.create_pen(255, 0, 255)
+YELLOW = display.create_pen(255, 255, 0)
+GREEN = display.create_pen(0, 255, 0)
+
+SWITCH_A_PIN = const(16)
+SWITCH_B_PIN = const(15)
+SWITCH_C_PIN = const(14)
+SWITCH_X_PIN = const(17)
+SWITCH_Y_PIN = const(18)
+SWITCH_Z_PIN = const(19)
+
+I2C_SDA_PIN = const(20)
+I2C_SCL_PIN = const(21)
+
+USER_SW_PIN = const(22)
+
+SERVO_1_PIN = const(9)
+SERVO_2_PIN = const(8)
+SERVO_3_PIN = const(7)
+SERVO_4_PIN = const(6)
+
+ADC_0_PIN = const(40)
+ADC_1_PIN = const(41)
+ADC_2_PIN = const(42)
+ADC_3_PIN = const(43)
+ADC_4_PIN = const(44)
+ADC_5_PIN = const(45)
+
+GPIO_0_PIN = const(0)
+GPIO_1_PIN = const(1)
+GPIO_2_PIN = const(2)
+GPIO_3_PIN = const(3)
+GPIO_4_PIN = const(4)
+GPIO_5_PIN = const(5)
+
+PWM_AUDIO_PIN = const(12)
+AMP_EN_PIN = const(13)
+
+AMP_CORRECTION = const(4)
+DEFAULT_VOLUME = const(0.2)
+
 
 class PimoroniExplorer():
-    SWITCH_A_PIN = 16
-    SWITCH_B_PIN = 15
-    SWITCH_C_PIN = 14
-    SWITCH_X_PIN = 17
-    SWITCH_Y_PIN = 18
-    SWITCH_Z_PIN = 19
-
-    I2C_SDA_PIN = 20
-    I2C_SCL_PIN = 21
-
-    USER_SW_PIN = 22
-
-    SERVO_1_PIN = 9
-    SERVO_2_PIN = 8
-    SERVO_3_PIN = 7
-    SERVO_4_PIN = 6
-
-    ADC_0_PIN = 40
-    ADC_1_PIN = 41
-    ADC_2_PIN = 42
-    ADC_3_PIN = 43
-    ADC_4_PIN = 44
-    ADC_5_PIN = 45
-
-    GPIO_0_PIN = 0
-    GPIO_1_PIN = 1
-    GPIO_2_PIN = 2
-    GPIO_3_PIN = 3
-    GPIO_4_PIN = 4
-    GPIO_5_PIN = 5
-
-    PWM_AUDIO_PIN = 12
-    AMP_EN_PIN = 13
-
-    AMP_CORRECTION = 4
-    DEFAULT_VOLUME = 0.2
-
+    
     def __init__(self, init_servos=True):
         # Free up hardware resources
         gc.collect()
 
-        self.display = PicoGraphics(display=DISPLAY_EXPLORER)
+        self.display = display
 
         # Set up the servos, if the user wants them
         self.servos = None
         if init_servos:
-            self.servos = [Servo(self.SERVO_1_PIN - i) for i in range(4)]
+            self.servos = [Servo(SERVO_1_PIN - i) for i in range(4)]
 
         # Set up the i2c for Qw/st and Breakout Garden
-        self.i2c = PimoroniI2C(self.I2C_SDA_PIN, self.I2C_SCL_PIN, 100000)
+        self.i2c = PimoroniI2C(I2C_SDA_PIN, I2C_SCL_PIN, 100000)
 
         # Set up the amp enable
-        self._amp_en = Pin(self.AMP_EN_PIN, Pin.OUT)
+        self._amp_en = Pin(AMP_EN_PIN, Pin.OUT)
         self._amp_en.off()
 
-        self.audio_pwm = PWM(Pin(self.PWM_AUDIO_PIN))
-        self._volume = self.DEFAULT_VOLUME
-        
-        
+        self.audio_pwm = PWM(Pin(PWM_AUDIO_PIN))
+        self._volume = DEFAULT_VOLUME
+
+        # Setup the pins for the buttons
+        self.button_a = Pin(SWITCH_A_PIN, Pin.IN, Pin.PULL_UP)
+        self.button_b = Pin(SWITCH_B_PIN, Pin.IN, Pin.PULL_UP)
+        self.button_c = Pin(SWITCH_C_PIN, Pin.IN, Pin.PULL_UP)
+        self.button_x = Pin(SWITCH_X_PIN, Pin.IN, Pin.PULL_UP)
+        self.button_y = Pin(SWITCH_Y_PIN, Pin.IN, Pin.PULL_UP)
+        self.button_z = Pin(SWITCH_Z_PIN, Pin.IN, Pin.PULL_UP)
 
     def play_tone(self, frequency):
         try:
