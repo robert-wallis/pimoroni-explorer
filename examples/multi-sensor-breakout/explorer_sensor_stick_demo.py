@@ -1,11 +1,11 @@
 # Display readings from the multi-sensor stick on the Explorer screen
-from explorer import Explorer2350
+from pimoroni_explorer import PimoroniExplorer
 from breakout_ltr559 import BreakoutLTR559
 from lsm6ds3 import LSM6DS3
 from breakout_bme280 import BreakoutBME280
 import time
 
-board = Explorer2350()
+board = PimoroniExplorer()
 
 ltr = BreakoutLTR559(board.i2c)
 lsm = LSM6DS3(board.i2c)
