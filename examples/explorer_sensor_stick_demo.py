@@ -31,6 +31,6 @@ while True:
     if ax is not None:
         display.text(f"Accelerometer:\nX: {ax:.0f}, Y: {ay:.0f}, \nZ: {az:.0f}\nGyro:\nX: {gx:.0f}, Y: {gy:.0f}, \nZ: {gz:.0f}", 0, 45, 320, 3)
     if temperature is not None:
-        display.text(f"Temperature: {temperature:.2f}°C,\nHumidity: {humidity:.0f}%,\nPressure: {pressure/100:.0f}hPa", 0, 180, 320, 3)
+        display.text(f"Temperature: {temperature:.2f}°C,\nHumidity: {humidity:.0f}%,\nPressure: {pressure / 100:.0f}hPa", 0, 180, 320, 3)
     display.update()
     time.sleep(0.1)
