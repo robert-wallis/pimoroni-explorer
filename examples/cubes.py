@@ -1,15 +1,9 @@
 import time
-from picographics import PicoGraphics, DISPLAY_EXPLORER, PEN_P8
 import math
 from random import randint, randrange
+from pimoroni_explorer import display, BLACK
 
-display = PicoGraphics(display=DISPLAY_EXPLORER, pen_type=PEN_P8)
 WIDTH, HEIGHT = display.get_bounds()
-
-# Define colours
-BLACK = display.create_pen(0, 0, 0)
-WHITE = display.create_pen(255, 255, 255)
-GREEN = display.create_pen(0, 255, 0)
 
 
 class Cube(object):

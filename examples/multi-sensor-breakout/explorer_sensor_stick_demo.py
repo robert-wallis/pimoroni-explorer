@@ -1,23 +1,13 @@
 # Display readings from the multi-sensor stick on the Explorer screen
-from pimoroni_explorer import PimoroniExplorer
+from pimoroni_explorer import display, i2c, BLACK, WHITE
 from breakout_ltr559 import BreakoutLTR559
 from lsm6ds3 import LSM6DS3
 from breakout_bme280 import BreakoutBME280
 import time
 
-board = PimoroniExplorer()
-
-ltr = BreakoutLTR559(board.i2c)
-lsm = LSM6DS3(board.i2c)
-bme = BreakoutBME280(board.i2c)
-
-display = board.display
-
-# lets set up some pen colours to make drawing easier
-WHITE = display.create_pen(255, 255, 255)
-BLACK = display.create_pen(0, 0, 0)
-RED = display.create_pen(255, 0, 0)
-GREY = display.create_pen(125, 125, 125)
+ltr = BreakoutLTR559(i2c)
+lsm = LSM6DS3(i2c)
+bme = BreakoutBME280(i2c)
 
 while True:
     lux, _, _, _, _, _, prox = ltr.get_reading()

@@ -3,13 +3,9 @@
 
 import time
 import math
-from picographics import PicoGraphics, DISPLAY_EXPLORER, PEN_RGB565
-
-display = PicoGraphics(display=DISPLAY_EXPLORER, pen_type=PEN_RGB565)
+from pimoroni_explorer import display, BLACK
 
 WIDTH, HEIGHT = display.get_bounds()
-
-BLACK = display.create_pen(0, 0, 0)
 
 
 # From CPython Lib/colorsys.py

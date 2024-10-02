@@ -1,27 +1,16 @@
 import time
-from picographics import PicoGraphics, DISPLAY_EXPLORER, PEN_RGB565
-from machine import Pin
+from pimoroni_explorer import display, button_a, button_x, button_y, RED, GREEN, BLUE, MAGENTA, BLACK, WHITE
 
-button_a = Pin(16, Pin.IN, Pin.PULL_UP)
-button_x = Pin(17, Pin.IN, Pin.PULL_UP)
-button_y = Pin(18, Pin.IN, Pin.PULL_UP)
+WIDTH, HEIGHT = display.get_bounds()
 
-display = PicoGraphics(display=DISPLAY_EXPLORER, pen_type=PEN_RGB565, rotate=0)
 display.set_backlight(0.8)
 
 # set up constants for drawing
-WIDTH, HEIGHT = display.get_bounds()
-BLACK = display.create_pen(0, 0, 0)
-RED = display.create_pen(255, 0, 0)
-GREEN = display.create_pen(0, 255, 0)
-BLUE = display.create_pen(0, 0, 255)
-WHITE = display.create_pen(255, 255, 255)
-PURPLE = display.create_pen(255, 0, 255)
 
 
 class Menu(object):
     def __init__(self):
-        self.items = ["Red", "Green", "Blue", "Purple"]
+        self.items = ["Red", "Green", "Blue", "Magenta"]
         self.selected = 0
         self.shadow_offset = 2
         self.cursor = "<-"
@@ -64,7 +53,7 @@ class Menu(object):
             self.colour = BLUE
 
         if self.selected == 3:
-            self.colour = PURPLE
+            self.colour = MAGENTA
 
     def user_input(self):
         # Process the user input and update the currently selected item

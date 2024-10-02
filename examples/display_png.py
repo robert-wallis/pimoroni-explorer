@@ -1,12 +1,8 @@
-# Display a PNG image on Explorer 2350
+# Display a PNG image on Pimoroni Explorer
 
-from explorer import Explorer2350
+from pimoroni_explorer import display
 import pngdec
 import gc
-
-board = Explorer2350()
-
-display = board.display
 
 # run garbage collection - displaying large PNGs is resource intensive
 gc.collect()

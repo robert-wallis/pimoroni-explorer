@@ -1,31 +1,28 @@
 import time
 import math
-from explorer import Explorer2350
+from pimoroni_explorer import servos
 
 """
 Demonstrates how to control all of the servos on Explorer.
 """
 
-# Create a new Explorer
-board = Explorer2350()
-
 # Enable all servos (this puts them at the middle)
-for s in board.servos:
+for s in servos:
     s.enable()
 time.sleep(2)
 
 # Go to min
-for s in board.servos:
+for s in servos:
     s.to_min()
 time.sleep(2)
 
 # Go to max
-for s in board.servos:
+for s in servos:
     s.to_max()
 time.sleep(2)
 
 # Go back to mid
-for s in board.servos:
+for s in servos:
     s.to_mid()
 time.sleep(2)
 
@@ -38,21 +35,21 @@ SWEEP_EXTENT = 90.0     # How far from zero to move the servo when sweeping
 for j in range(SWEEPS):
     for i in range(360):
         value = math.sin(math.radians(i)) * SWEEP_EXTENT
-        for s in board.servos:
+        for s in servos:
             s.value(value)
         time.sleep(0.02)
 
 # Do a stepped sweep
 for j in range(SWEEPS):
     for i in range(0, STEPS):
-        for s in board.servos:
+        for s in servos:
             s.to_percent(i, 0, STEPS, 0.0 - SWEEP_EXTENT, SWEEP_EXTENT)
         time.sleep(STEPS_INTERVAL)
     for i in range(0, STEPS):
-        for s in board.servos:
+        for s in servos:
             s.to_percent(i, STEPS, 0, 0.0 - SWEEP_EXTENT, SWEEP_EXTENT)
         time.sleep(STEPS_INTERVAL)
 
 # Disable the servos
-for s in board.servos:
+for s in servos:
     s.disable()

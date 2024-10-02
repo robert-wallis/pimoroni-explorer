@@ -1,21 +1,15 @@
 import time
 import pngdec
-from machine import I2C
 from lsm6ds3 import LSM6DS3, NORMAL_MODE_104HZ
-from picographics import PicoGraphics, DISPLAY_EXPLORER, PEN_P8
-
-display = PicoGraphics(display=DISPLAY_EXPLORER, pen_type=PEN_P8)
+from pimoroni_explorer import display, i2c, BLACK, WHITE
 png = pngdec.PNG(display)
 
 WIDTH, HEIGHT = display.get_bounds()
 
 # Some colours we'll need later on
 BG = display.create_pen(255, 99, 71)
-WHITE = display.create_pen(255, 255, 255)
-BLACK = display.create_pen(0, 0, 0)
 
-# Create the I2C instance and pass that to LSM6DS3
-i2c = I2C(0, scl=21, sda=20)
+# Setup LSM6DS3
 sensor = LSM6DS3(i2c, mode=NORMAL_MODE_104HZ)
 
 # Text size and Offset for the drop shadow. We'll use these later!
