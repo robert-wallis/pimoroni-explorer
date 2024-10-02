@@ -8,23 +8,11 @@ Note that if you're using our square buttons, you should connect wires to two pi
 
 from machine import Pin
 import time
-from explorer import Explorer2350
-
-board = Explorer2350()
-
-display = board.display
+from pimoroni_explorer import display, BLACK, BLUE, YELLOW, RED, WHITE
 
 yellow_button = Pin(0, Pin.IN, Pin.PULL_UP)
 blue_button = Pin(1, Pin.IN, Pin.PULL_UP)
 red_button = Pin(2, Pin.IN, Pin.PULL_UP)
-
-# lets set up some pen colours to make drawing easier
-WHITE = display.create_pen(255, 255, 255)
-BLACK = display.create_pen(0, 0, 0)
-YELLOW = display.create_pen(0, 255, 255)
-BLUE = display.create_pen(0, 0, 255)
-RED = display.create_pen(255, 0, 0)
-
 
 while True:
     display.set_pen(BLACK)

@@ -1,5 +1,5 @@
 import time
-from explorer import Explorer2350
+from pimoroni_explorer import play_silence, play_tone, set_volume, stop_playing
 
 """
 This example shows you how you can use Explorer's audio output
@@ -111,21 +111,18 @@ SONG = ("F6", "F6", "E6", "F6", "F5", "P", "F5", "P", "C6", "AS5", "A5", "C6", "
 NOTE_DURATION = 0.150           # The time (in seconds) to play each note for. Change this to make the song play faster or slower
 
 
-# Create a new Explorer
-board = Explorer2350()
-
 # Set the volume of the speaker output
-board.volume(0.25)
+set_volume(0.2)
 
 # Play the song
 for i in range(len(SONG)):
     if SONG[i] == "P":
         # This is a "pause" note, so stop the motors
-        board.play_silence()
+        play_silence()
     else:
         # Get the frequency of the note and play it
-        board.play_tone(TONES[SONG[i]])
+        play_tone(TONES[SONG[i]])
 
     time.sleep(NOTE_DURATION)
 
-board.stop_playing()
+stop_playing()

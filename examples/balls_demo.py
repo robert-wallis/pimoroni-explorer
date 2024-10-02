@@ -1,8 +1,6 @@
 import time
 import random
-from picographics import PicoGraphics, DISPLAY_EXPLORER, PEN_P8
-
-display = PicoGraphics(display=DISPLAY_EXPLORER, pen_type=PEN_P8)
+from pimoroni_explorer import display
 
 WIDTH, HEIGHT = display.get_bounds()
 

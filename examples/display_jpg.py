@@ -1,9 +1,5 @@
-from explorer import Explorer2350
+from pimoroni_explorer import display
 import jpegdec
-
-board = Explorer2350()
-
-display = board.display
 
 # Create a new JPEG decoder for our PicoGraphics
 j = jpegdec.JPEG(display)

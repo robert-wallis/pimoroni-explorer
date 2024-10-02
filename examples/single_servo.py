@@ -1,19 +1,10 @@
 import time
 import math
-from explorer import Explorer2350, SERVO_1
+from pimoroni_explorer import display, servos, SERVO_1, BLACK, WHITE
 
 """
 Demonstrates how to control a single servo on Explorer.
 """
-
-# Create a new Explorer2350
-board = Explorer2350()
-
-display = board.display
-
-# lets set up some pen colours to make drawing easier
-WHITE = display.create_pen(255, 255, 255)
-BLACK = display.create_pen(0, 0, 0)
 
 display.set_pen(BLACK)
 display.clear()
@@ -25,7 +16,8 @@ display.update()
 time.sleep(2)
 
 # Access the servo from Explorer and enable it (this puts it at the middle)
-s = board.servos[SERVO_1]
+
+s = servos[SERVO_1]
 
 display.text("Enable servo", 0, 50, 320, 3)
 display.update()

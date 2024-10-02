@@ -1,27 +1,8 @@
 """
 This example shows you a simple, non-interrupt way of reading Pico Explorer's buttons with a loop that checks to see if buttons are pressed.
 """
-
 import time
-from picographics import PicoGraphics, DISPLAY_EXPLORER, PEN_P4
-from machine import Pin
-
-# We're only using a few colours so we can use a 4 bit/16 colour palette and save RAM!
-display = PicoGraphics(display=DISPLAY_EXPLORER, pen_type=PEN_P4)
-
-button_a = Pin(16, Pin.IN, Pin.PULL_UP)
-button_b = Pin(15, Pin.IN, Pin.PULL_UP)
-button_c = Pin(14, Pin.IN, Pin.PULL_UP)
-button_x = Pin(17, Pin.IN, Pin.PULL_UP)
-button_y = Pin(18, Pin.IN, Pin.PULL_UP)
-button_z = Pin(19, Pin.IN, Pin.PULL_UP)
-
-WHITE = display.create_pen(255, 255, 255)
-BLACK = display.create_pen(0, 0, 0)
-CYAN = display.create_pen(0, 255, 255)
-MAGENTA = display.create_pen(255, 0, 255)
-YELLOW = display.create_pen(255, 255, 0)
-GREEN = display.create_pen(0, 255, 0)
+from pimoroni_explorer import button_a, button_b, button_c, button_x, button_y, button_z, display, WHITE, CYAN, MAGENTA, YELLOW, GREEN, BLACK
 
 
 # sets up a handy function we can call to clear the screen
