@@ -23,6 +23,8 @@ CYAN = const(65287)
 MAGENTA = const(8184)
 YELLOW = const(57599)
 GREEN = const(57351)
+RED = const(248)
+BLUE = const(7936)
 
 SWITCH_A_PIN = const(16)
 SWITCH_B_PIN = const(15)
