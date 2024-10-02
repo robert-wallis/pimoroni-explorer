@@ -63,9 +63,6 @@ AMP_EN_PIN = const(13)
 AMP_CORRECTION = const(4)
 DEFAULT_VOLUME = const(0.2)
 
-# Store the servos here if the user inits them.
-servos = []
-
 # Set up the i2c for Qw/st and Breakout Garden
 i2c = PimoroniI2C(I2C_SDA_PIN, I2C_SCL_PIN, 100000)
 
@@ -86,6 +83,9 @@ button_z = Pin(SWITCH_Z_PIN, Pin.IN, Pin.PULL_UP)
 
 # Setup the display
 display = PicoGraphics(display=DISPLAY_EXPLORER)
+
+# setup servos
+servos = [Servo(SERVO_1_PIN - i) for i in range(4)]
 
 
 def play_tone(frequency):
@@ -126,8 +126,3 @@ def set_volume(volume=None):
 
 def mute_audio(value=True):
     _amp_en.off() if value else _amp_en.on()
-
-
-def init_servos():
-    global servos
-    servos = [Servo(SERVO_1_PIN - i) for i in range(4)]
