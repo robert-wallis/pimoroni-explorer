@@ -3,8 +3,13 @@
 import gc
 import time
 from os import listdir
-from picographics import PicoGraphics, DISPLAY_EXPLORER, PEN_RGB332
-from machine import Pin
+import pngdec
+from pimoroni_explorer import display, button_a, button_x, button_y, BLACK, WHITE
+
+p = pngdec.PNG(display)
+p.open_file("backgroundforscreen.png")
+p.decode(0, 0)
+background = memoryview(bytearray(display))
 
 
 def hsv_to_rgb(h: float, s: float, v: float) -> tuple[float, float, float]:
@@ -66,24 +71,17 @@ def prepare_for_launch() -> None:
 def menu() -> str:
     applications = get_applications()
 
-    button_x = Pin(17, Pin.IN, Pin.PULL_UP)
-    button_y = Pin(18, Pin.IN, Pin.PULL_UP)
-    button_a = Pin(16, Pin.IN, Pin.PULL_UP)
-
-    display = PicoGraphics(display=DISPLAY_EXPLORER, pen_type=PEN_RGB332)
     display.set_backlight(1.0)
 
     selected_item = 2
     scroll_position = 2
     target_scroll_position = 2
 
-    selected_pen = display.create_pen(255, 255, 255)
-    unselected_pen = display.create_pen(80, 80, 100)
-    background_pen = display.create_pen(50, 50, 70)
-    shadow_pen = display.create_pen(0, 0, 0)
+    selected_pen = WHITE
+    unselected_pen = WHITE
+    shadow_pen = BLACK
 
     while True:
-        t = time.ticks_ms() / 1000.0
 
         if button_x.value() == 0:
             target_scroll_position -= 1
@@ -100,20 +98,9 @@ def menu() -> str:
 
             return applications[selected_item]["file"]
 
-        display.set_pen(background_pen)
-        display.clear()
+        memoryview(display)[:] = memoryview(background)[:]
 
         scroll_position += (target_scroll_position - scroll_position) / 5
-
-        grid_size = 40
-        for y in range(0, 240 // grid_size):
-            for x in range(0, 320 // grid_size):
-                h = x + y + int(t * 5)
-                h = h / 50.0
-                r, g, b = hsv_to_rgb(h, 0.5, 1)
-
-                display.set_pen(display.create_pen(r, g, b))
-                display.rectangle(x * grid_size, y * grid_size, grid_size, grid_size)
 
         # work out which item is selected (closest to the current scroll position)
         selected_item = round(target_scroll_position)
@@ -121,16 +108,15 @@ def menu() -> str:
         for list_index, application in enumerate(applications):
             distance = list_index - scroll_position
 
-            text_size = 4 if selected_item == list_index else 3
+            text_size = 4 if selected_item == list_index else 2
 
-            # center text horixontally
-            title_width = display.measure_text(application["title"], text_size)
-            text_x = int(160 - title_width / 2)
+            # center text horizontally
+            text_x = 10
 
             row_height = text_size * 5 + 20
 
             # center list items vertically
-            text_y = int(120 + distance * row_height - (row_height / 2))
+            text_y = int(90 + distance * row_height - (row_height / 2))
 
             # draw the text, selected item brightest and with shadow
             if selected_item == list_index:
