@@ -1,5 +1,5 @@
 import time
-from pimoroni_explorer import play_silence, play_tone, set_volume, stop_playing
+from pimoroni_explorer import play_silence, play_tone, set_volume, stop_playing, button_x
 
 """
 This example shows you how you can use Explorer's audio output
@@ -8,7 +8,7 @@ with a speaker to play different notes and string them together into a bleepy tu
 It uses code written by Avram Piltch - check out his Tom's Hardware article!
 https://www.tomshardware.com/uk/how-to/buzzer-music-raspberry-pi-pico
 
-Press "User" button to start or stop the song.
+Press "X" button to start or stop the song.
 """
 
 
@@ -114,6 +114,7 @@ NOTE_DURATION = 0.150           # The time (in seconds) to play each note for. C
 # Set the volume of the speaker output
 set_volume(0.2)
 
+
 # Play the song
 for i in range(len(SONG)):
     if SONG[i] == "P":
@@ -125,4 +126,6 @@ for i in range(len(SONG)):
 
     time.sleep(NOTE_DURATION)
 
-stop_playing()
+    if button_x.value() == 0:
+        stop_playing()
+        break
