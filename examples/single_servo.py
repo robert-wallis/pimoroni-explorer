@@ -1,56 +1,76 @@
-import time
-import math
-from pimoroni_explorer import display, servos, SERVO_1, BLACK, WHITE
-
 """
 Demonstrates how to control a single servo on Explorer.
 """
+import time
+import math
+from pimoroni_explorer import display, servos, SERVO_1, button_a, BLACK, WHITE
+from micropython import const
 
-display.set_pen(BLACK)
-display.clear()
-display.set_pen(WHITE)
+BG = display.create_pen(255, 99, 71)
+SWEEPS = const(3)                     # How many sweeps of the servo to perform
+STEPS = const(10)                     # The number of discrete sweep steps
+STEPS_INTERVAL = const(0.5)           # The time in seconds between each step of the sequence
+SWEEP_EXTENT = const(90.0)            # How far from zero to move the servo when sweeping
+
+
+# A little function to save ourselves some time doing the drop shadows :)
+def drop_shadow_text(text, x, y, offset, wrap, size, main_colour):
+
+    # Draw the drop shadow
+    display.set_pen(BLACK)
+    display.text(text, x + offset, y + offset, wrap, size)
+
+    # Draw the main text
+    display.set_pen(main_colour)
+    display.text(text, x, y, wrap, size)
+
+
+def clear():
+    display.set_pen(BG)
+    display.clear()
+
+
+# Clear the screen and draw the prompt
+clear()
+drop_shadow_text("Attach a servo to slot 1!\n\nPress A to start", 10, 75, 3, 320, 3, WHITE)
 display.update()
 
-display.text("Attach a servo to slot 1!", 0, 0, 320, 3)
-display.update()
-time.sleep(2)
+# We'll wait here until the user presses the A button
+while (button_a.value()):
+    pass
 
 # Access the servo from Explorer and enable it (this puts it at the middle)
-
 s = servos[SERVO_1]
-
-display.text("Enable servo", 0, 50, 320, 3)
+clear()
+drop_shadow_text("Enabling Servo...", 10, 75, 3, 320, 3, WHITE)
 display.update()
 s.enable()
 time.sleep(2)
 
 # Go to min
-display.text("Go to min", 0, 70, 320, 3)
+clear()
+drop_shadow_text("Go to min", 10, 75, 3, 320, 3, WHITE)
 display.update()
 s.to_min()
 time.sleep(2)
 
 # Go to max
-display.text("Go to max", 0, 90, 320, 3)
+clear()
+drop_shadow_text("Go to max", 10, 75, 3, 320, 3, WHITE)
 display.update()
 s.to_max()
 time.sleep(2)
 
 # Go back to mid
-display.text("Back to middle", 0, 110, 320, 3)
+clear()
+drop_shadow_text("Back to the middle", 10, 75, 3, 320, 3, WHITE)
 display.update()
 s.to_mid()
 time.sleep(2)
 
-
-SWEEPS = 3              # How many sweeps of the servo to perform
-STEPS = 10              # The number of discrete sweep steps
-STEPS_INTERVAL = 0.5    # The time in seconds between each step of the sequence
-SWEEP_EXTENT = 90.0     # How far from zero to move the servo when sweeping
-
-
 # Do a sine sweep
-display.text(f"Do {SWEEPS} sine sweeps", 0, 130, 320, 3)
+clear()
+drop_shadow_text(f"Do {SWEEPS} sine sweeps", 10, 75, 3, 320, 3, WHITE)
 display.update()
 for j in range(SWEEPS):
     for i in range(360):
@@ -58,7 +78,8 @@ for j in range(SWEEPS):
         time.sleep(0.02)
 
 # Do a stepped sweep
-display.text(f"Do {SWEEPS} stepped sweeps", 0, 150, 320, 3)
+clear()
+drop_shadow_text(f"Do {SWEEPS} stepped sweeps", 10, 75, 3, 320, 3, WHITE)
 display.update()
 for j in range(SWEEPS):
     for i in range(0, STEPS):
@@ -69,6 +90,11 @@ for j in range(SWEEPS):
         time.sleep(STEPS_INTERVAL)
 
 # Disable the servo
-display.text("Disable servo", 0, 170, 320, 3)
+clear()
+drop_shadow_text("Disable servo ", 10, 75, 3, 320, 3, WHITE)
 display.update()
 s.disable()
+
+clear()
+drop_shadow_text("Done!", 10, 75, 3, 320, 3, WHITE)
+display.update()
