@@ -1,7 +1,7 @@
 import time
 import math
 from random import randint, randrange
-from pimoroni_explorer import display, BLACK
+from pimoroni_explorer import display, BLACK, WHITE
 
 WIDTH, HEIGHT = display.get_bounds()
 
@@ -120,6 +120,8 @@ while 1:
     # Clear the screen and set the pen colour for the cubes
     display.set_pen(BLACK)
     display.clear()
+    display.set_pen(WHITE)
+    display.text("Flying Cubes!", 100, 110, 320, 2)
     display.reset_pen(pen)
     pen = display.create_pen_hsv(t, 1.0, 1.0)
     display.set_pen(pen)
