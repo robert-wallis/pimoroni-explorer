@@ -1,5 +1,5 @@
 import time
-from pimoroni_explorer import play_silence, play_tone, set_volume, stop_playing, button_x
+from pimoroni_explorer import display, play_silence, play_tone, set_volume, stop_playing, button_x, WHITE, BLACK
 
 """
 This example shows you how you can use Explorer's audio output
@@ -11,6 +11,8 @@ https://www.tomshardware.com/uk/how-to/buzzer-music-raspberry-pi-pico
 Press "X" button to start or stop the song.
 """
 
+WIDTH, HEIGHT = display.get_bounds()
+BG = display.create_pen(70, 130, 180)
 
 # This handy list converts notes into frequencies, which you can use with the inventor.play_tone function
 TONES = {
@@ -114,6 +116,20 @@ NOTE_DURATION = 0.150           # The time (in seconds) to play each note for. C
 # Set the volume of the speaker output
 set_volume(0.2)
 
+# Clear the screen
+display.set_pen(BG)
+display.clear()
+
+# Draw the drop shadow
+display.set_pen(BLACK)
+display.text("Press X\nto stop playback", 78, 78, WIDTH, 4)
+
+# Draw the main text
+display.set_pen(WHITE)
+display.text("Press X\nto stop playback", 75, 75, WIDTH, 4)
+
+# Screen update!
+display.update()
 
 # Play the song
 for i in range(len(SONG)):
@@ -129,3 +145,20 @@ for i in range(len(SONG)):
     if button_x.value() == 0:
         stop_playing()
         break
+
+stop_playing()
+
+# Clear the screen
+display.set_pen(BG)
+display.clear()
+
+# Draw the drop shadow
+display.set_pen(BLACK)
+display.text("The\nEnd", 128, 93, WIDTH, 4)
+
+# Draw the main text
+display.set_pen(WHITE)
+display.text("The\nEnd", 125, 90, WIDTH, 4)
+
+# Screen update!
+display.update()
