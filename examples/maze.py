@@ -81,7 +81,7 @@ class Game(object):
             for col in range(len(self.maze[row])):
                 if self.maze[row][col] == 1:
                     display.set_pen(BLACK)
-                    display.rectangle(col * 10 + 2, row * 10 + 2, 9, 9)
+                    display.rectangle(col * 10 + 2, row * 10 + 2, 10, 10)
                     display.set_pen(WALL)
                     display.rectangle(col * 10, row * 10, 9, 9)
 
