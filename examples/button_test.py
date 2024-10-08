@@ -27,6 +27,16 @@ def clear():
 # set up
 clear()
 display.set_font("bitmap8")
+
+# Clear all layers first
+display.set_layer(0)
+display.set_pen(WHITE)
+display.clear()
+display.set_layer(1)
+display.set_pen(BLACK)
+display.clear()
+
+# Set the layer back to the first
 display.set_layer(0)
 
 while True:

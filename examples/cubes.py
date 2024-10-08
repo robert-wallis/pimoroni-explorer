@@ -112,6 +112,14 @@ cubes = [Cube(16, 4, WIDTH / 2, HEIGHT / 2, 1.0), Cube(32, 4, 100, 100, 0.9), Cu
 # Set our initial pen colour
 pen = display.create_pen_hsv(1.0, 1.0, 1.0)
 
+# Clear all layers first
+display.set_layer(0)
+display.set_pen(BLACK)
+display.clear()
+display.set_layer(1)
+display.set_pen(BLACK)
+display.clear()
+
 while 1:
 
     # We'll use this for cycling through the rainbow

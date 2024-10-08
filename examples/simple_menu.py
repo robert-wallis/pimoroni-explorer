@@ -5,7 +5,13 @@ WIDTH, HEIGHT = display.get_bounds()
 
 display.set_backlight(0.8)
 
-# set up constants for drawing
+# Clear all layers first
+display.set_layer(0)
+display.set_pen(BLACK)
+display.clear()
+display.set_layer(1)
+display.set_pen(BLACK)
+display.clear()
 
 
 class Menu(object):
@@ -19,6 +25,7 @@ class Menu(object):
 
     # A function to draw only the menu elements.
     def draw_menu(self):
+        display.set_layer(0)
         display.set_pen(WHITE)
         display.clear()
         display.set_pen(BLACK)

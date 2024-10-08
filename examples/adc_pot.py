@@ -23,7 +23,19 @@ y = 170
 # Setup the ADC for the pot.
 pot = ADC(ADC_0_PIN)
 
+# Clear all layers first
+display.set_layer(0)
+display.set_pen(BLACK)
+display.clear()
+display.set_layer(1)
+display.set_pen(BLACK)
+display.clear()
+
+display.set_layer(0)
+
+
 while True:
+
     display.set_pen(BG)
     display.clear()
 

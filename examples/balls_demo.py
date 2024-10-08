@@ -1,6 +1,6 @@
 import time
 import random
-from pimoroni_explorer import display
+from pimoroni_explorer import display, BLACK
 
 WIDTH, HEIGHT = display.get_bounds()
 
@@ -34,6 +34,15 @@ for i in range(0, 100):
     )
 
 BG = display.create_pen(40, 40, 40)
+
+# Clear all layers first
+display.set_layer(0)
+display.set_pen(BLACK)
+display.clear()
+display.set_layer(1)
+display.set_pen(BLACK)
+display.clear()
+
 
 while True:
 

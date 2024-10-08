@@ -1,8 +1,16 @@
 # Display a PNG image on Pimoroni Explorer
 
-from pimoroni_explorer import display
+from pimoroni_explorer import display, BLACK
 import pngdec
 import gc
+
+# Clear all layers first
+display.set_layer(0)
+display.set_pen(BLACK)
+display.clear()
+display.set_layer(1)
+display.set_pen(BLACK)
+display.clear()
 
 # Set the layer we're going to be drawing to.
 display.set_layer(0)
