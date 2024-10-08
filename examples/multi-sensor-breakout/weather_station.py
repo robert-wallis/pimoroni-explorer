@@ -5,6 +5,14 @@ from breakout_bme280 import BreakoutBME280
 from pimoroni_explorer import display, i2c, BLACK, WHITE, RED
 import jpegdec
 
+# Clear all layers first
+display.set_layer(0)
+display.set_pen(BLACK)
+display.clear()
+display.set_layer(1)
+display.set_pen(BLACK)
+display.clear()
+
 try:
     bme = BreakoutBME280(i2c, address=0x76)
 except RuntimeError:

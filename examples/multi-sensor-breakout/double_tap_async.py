@@ -3,8 +3,15 @@ from lsm6ds3 import LSM6DS3, NORMAL_MODE_104HZ
 import asyncio
 import sys
 
-
 WIDTH, HEIGHT = display.get_bounds()
+
+# Clear all layers first
+display.set_layer(0)
+display.set_pen(BLACK)
+display.clear()
+display.set_layer(1)
+display.set_pen(BLACK)
+display.clear()
 
 # Define our own pen for the background
 BG = display.create_pen(70, 130, 180)

@@ -4,6 +4,14 @@ from pimoroni_explorer import display, i2c, button_a, button_b, button_c, button
 
 WIDTH, HEIGHT = display.get_bounds()
 
+# Clear all layers first
+display.set_layer(0)
+display.set_pen(BLACK)
+display.clear()
+display.set_layer(1)
+display.set_pen(BLACK)
+display.clear()
+
 BG = display.create_pen(70, 130, 180)
 
 try:

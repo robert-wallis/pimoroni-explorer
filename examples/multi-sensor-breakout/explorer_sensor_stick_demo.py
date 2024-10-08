@@ -5,6 +5,14 @@ from lsm6ds3 import LSM6DS3
 from breakout_bme280 import BreakoutBME280
 import time
 
+# Clear all layers first
+display.set_layer(0)
+display.set_pen(BLACK)
+display.clear()
+display.set_layer(1)
+display.set_pen(BLACK)
+display.clear()
+
 try:
     ltr = BreakoutLTR559(i2c)
     lsm = LSM6DS3(i2c)
