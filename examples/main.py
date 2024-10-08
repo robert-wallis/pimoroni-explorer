@@ -6,11 +6,6 @@ from os import listdir
 import pngdec
 from pimoroni_explorer import display, button_a, button_x, button_y, BLACK, WHITE
 
-p = pngdec.PNG(display)
-p.open_file("backgroundforscreen.png")
-p.decode(0, 0)
-background = memoryview(bytearray(display))
-
 
 def hsv_to_rgb(h: float, s: float, v: float) -> tuple[float, float, float]:
     if s == 0.0:
@@ -81,6 +76,12 @@ def menu() -> str:
     unselected_pen = WHITE
     shadow_pen = BLACK
 
+    # Set layer to 0 and decode the background PNG.
+    display.set_layer(0)
+    p = pngdec.PNG(display)
+    p.open_file("backgroundforscreen.png")
+    p.decode(0, 0)
+
     while True:
 
         if button_x.value() == 0:
@@ -98,12 +99,15 @@ def menu() -> str:
 
             return applications[selected_item]["file"]
 
-        memoryview(display)[:] = memoryview(background)[:]
-
         scroll_position += (target_scroll_position - scroll_position) / 5
 
         # work out which item is selected (closest to the current scroll position)
         selected_item = round(target_scroll_position)
+
+        # Set the layer to 1. We'll make all of our changes on this layer.
+        display.set_layer(1)
+        display.set_pen(BLACK)
+        display.clear()
 
         for list_index, application in enumerate(applications):
             distance = list_index - scroll_position
