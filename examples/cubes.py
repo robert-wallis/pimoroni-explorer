@@ -117,6 +117,9 @@ while 1:
     # We'll use this for cycling through the rainbow
     t = time.ticks_ms() / 1000
 
+    # Set the layer we're going to be drawing to.
+    display.set_layer(0)
+
     # Clear the screen and set the pen colour for the cubes
     display.set_pen(BLACK)
     display.clear()

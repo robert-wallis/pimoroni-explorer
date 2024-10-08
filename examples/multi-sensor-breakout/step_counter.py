@@ -20,6 +20,9 @@ while True:
     # Get the latest step count from the sensor
     steps = sensor.get_step_count()
 
+    # Set the layer we're going to be drawing to.
+    display.set_layer(0)
+
     # Clear the screen
     display.set_pen(BG)
     display.clear()

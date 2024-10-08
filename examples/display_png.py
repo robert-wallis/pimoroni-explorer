@@ -4,6 +4,9 @@ from pimoroni_explorer import display
 import pngdec
 import gc
 
+# Set the layer we're going to be drawing to.
+display.set_layer(0)
+
 # run garbage collection - displaying large PNGs is resource intensive
 gc.collect()
 

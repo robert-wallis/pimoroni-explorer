@@ -39,6 +39,8 @@ while True:
     t = time.ticks_ms() / (5 * 1000)
     bounce_y = int(120 + math.sin(t * 2 + h) * 3)
 
+    display.set_layer(0)
+
     r, g, b = [int(255 * c) for c in hsv_to_rgb(h / 360.0, 1.0, 1.0)]  # rainbow magic
     RAINBOW = display.create_pen(r, g, b)  # Create pen with converted HSV value
     display.set_pen(RAINBOW)  # Set pen

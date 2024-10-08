@@ -40,6 +40,9 @@ async def main():
 
     while True:
 
+        # Set the layer we're going to be drawing to.
+        display.set_layer(0)
+
         # Clear the screen
         display.set_pen(BG)
         display.clear()

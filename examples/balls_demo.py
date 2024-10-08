@@ -36,6 +36,8 @@ for i in range(0, 100):
 BG = display.create_pen(40, 40, 40)
 
 while True:
+
+    display.set_layer(0)
     display.set_pen(BG)
     display.clear()
 

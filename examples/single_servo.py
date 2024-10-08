@@ -30,6 +30,9 @@ def clear():
     display.clear()
 
 
+# Set the layer we're going to be drawing to.
+display.set_layer(0)
+
 # Clear the screen and draw the prompt
 clear()
 drop_shadow_text("Attach a servo to slot 1!\n\nPress A to start", 10, 75, 3, 320, 3, WHITE)

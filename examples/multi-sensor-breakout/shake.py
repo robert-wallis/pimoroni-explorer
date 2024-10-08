@@ -64,6 +64,10 @@ class PALETTE(object):
             time.sleep(0.1)
 
     def draw(self):
+
+        # Set the layer we're going to be drawing to.
+        display.set_layer(0)
+
         # Clear the screen
         display.set_pen(WHITE)
         display.clear()

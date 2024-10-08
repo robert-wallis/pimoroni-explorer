@@ -27,6 +27,7 @@ def clear():
 # set up
 clear()
 display.set_font("bitmap8")
+display.set_layer(0)
 
 while True:
     if button_a.value() == 0:

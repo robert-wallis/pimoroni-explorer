@@ -1,6 +1,9 @@
 from pimoroni_explorer import display
 import jpegdec
 
+# Set the layer we're going to be drawing to.
+display.set_layer(0)
+
 # Create a new JPEG decoder for our PicoGraphics
 j = jpegdec.JPEG(display)
 

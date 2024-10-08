@@ -16,6 +16,9 @@ offset = 3
 
 while True:
 
+    # Set the layer we're going to be drawing to.
+    display.set_layer(0)
+
     tap = sensor.double_tap_detected()
     start_tick = time.ticks_ms()
 

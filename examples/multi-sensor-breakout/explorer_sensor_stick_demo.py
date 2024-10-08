@@ -10,6 +10,10 @@ lsm = LSM6DS3(i2c)
 bme = BreakoutBME280(i2c)
 
 while True:
+
+    # Set the layer we're going to be drawing to.
+    display.set_layer(0)
+
     lux, _, _, _, _, _, prox = ltr.get_reading()
     ax, ay, az, gx, gy, gz = lsm.get_readings()
     temperature, pressure, humidity = bme.read()

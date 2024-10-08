@@ -116,6 +116,9 @@ NOTE_DURATION = 0.150           # The time (in seconds) to play each note for. C
 # Set the volume of the speaker output
 set_volume(0.2)
 
+# Set the layer we're going to be drawing to.
+display.set_layer(0)
+
 # Clear the screen
 display.set_pen(BG)
 display.clear()
