@@ -4,8 +4,18 @@ from pimoroni_explorer import display, i2c, button_a, button_b, button_c, button
 
 WIDTH, HEIGHT = display.get_bounds()
 
-# Setup the LSM6DS3
-sensor = LSM6DS3(i2c, mode=NORMAL_MODE_104HZ)
+BG = display.create_pen(70, 130, 180)
+
+try:
+    # Create the I2C instance and pass that to LSM6DS3
+    sensor = LSM6DS3(i2c, mode=NORMAL_MODE_104HZ)
+except OSError:
+    # Clear the screen
+    display.set_pen(BG)
+    display.clear()
+    display.set_pen(WHITE)
+    display.text("Multi-Sensor stick not detected! :(", 10, 95, WIDTH, 3)
+    display.update()
 
 
 class PALETTE(object):

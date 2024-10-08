@@ -1,13 +1,21 @@
 # Display readings from the multi-sensor stick on the Explorer screen
-from pimoroni_explorer import display, i2c, BLACK, WHITE
+from pimoroni_explorer import display, i2c, BLACK, WHITE, RED
 from breakout_ltr559 import BreakoutLTR559
 from lsm6ds3 import LSM6DS3
 from breakout_bme280 import BreakoutBME280
 import time
 
-ltr = BreakoutLTR559(i2c)
-lsm = LSM6DS3(i2c)
-bme = BreakoutBME280(i2c)
+try:
+    ltr = BreakoutLTR559(i2c)
+    lsm = LSM6DS3(i2c)
+    bme = BreakoutBME280(i2c)
+except OSError:
+    # Clear the screen
+    display.set_pen(RED)
+    display.clear()
+    display.set_pen(WHITE)
+    display.text("Multi-Sensor stick not detected! :(", 10, 95, 320, 3)
+    display.update()
 
 while True:
 
