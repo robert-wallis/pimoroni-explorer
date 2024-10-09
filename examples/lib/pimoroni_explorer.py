@@ -1,8 +1,11 @@
 from machine import Pin, PWM
 from pimoroni_i2c import PimoroniI2C
 from servo import Servo
-from picographics import PicoGraphics, DISPLAY_EXPLORER
+from picographics import PicoGraphics, DISPLAY_EXPLORER, PEN_RGB565
 from micropython import const
+
+# Enable layer support in PicoGraphics
+LAYERS = True
 
 # Index Constants
 SERVO_1 = const(0)
@@ -32,11 +35,10 @@ SWITCH_C_PIN = const(14)
 SWITCH_X_PIN = const(17)
 SWITCH_Y_PIN = const(18)
 SWITCH_Z_PIN = const(19)
+SWITCH_USER_PIN = const(22)
 
 I2C_SDA_PIN = const(20)
 I2C_SCL_PIN = const(21)
-
-USER_SW_PIN = const(22)
 
 SERVO_1_PIN = const(9)
 SERVO_2_PIN = const(8)
@@ -80,9 +82,10 @@ button_c = Pin(SWITCH_C_PIN, Pin.IN, Pin.PULL_UP)
 button_x = Pin(SWITCH_X_PIN, Pin.IN, Pin.PULL_UP)
 button_y = Pin(SWITCH_Y_PIN, Pin.IN, Pin.PULL_UP)
 button_z = Pin(SWITCH_Z_PIN, Pin.IN, Pin.PULL_UP)
+button_user = Pin(SWITCH_USER_PIN, Pin.IN)
 
 # Setup the display
-display = PicoGraphics(display=DISPLAY_EXPLORER)
+display = PicoGraphics(display=DISPLAY_EXPLORER, pen_type=PEN_RGB565, layers=2 if LAYERS else 1)
 
 # setup servos
 servos = [Servo(SERVO_1_PIN - i) for i in range(4)]

@@ -1,31 +1,33 @@
 import gc
 import time
-
-import machine
 import pngdec
-from picographics import DISPLAY_EXPLORER
-from picographics import PEN_RGB565 as PEN
-from picographics import PicoGraphics
+from pimoroni_explorer import display, button_a, BLACK
 from picovector import ANTIALIAS_X16, PicoVector, Polygon, Transform
 
 DIGITAL = True
 
-button = machine.Pin(16, machine.Pin.IN, machine.Pin.PULL_UP)  # Button Aaaaaaa
-
-display = PicoGraphics(DISPLAY_EXPLORER, pen_type=PEN, layers=2)
+button = button_a  # Button Aaaaaaa
 
 png = pngdec.PNG(display)
 
 vector = PicoVector(display)
 vector.set_antialiasing(ANTIALIAS_X16)
 
+# Custom colours
 YELLOW = display.create_pen(200, 150, 50)
-BLACK = display.create_pen(0, 0, 0)
 GREY = display.create_pen(200, 200, 200)
 WHITE = display.create_pen(215, 215, 255)
 BLUE = display.create_pen(23, 52, 93)
 
 WIDTH, HEIGHT = display.get_bounds()
+
+# Clear all layers first
+display.set_layer(0)
+display.set_pen(BLACK)
+display.clear()
+display.set_layer(1)
+display.set_pen(BLACK)
+display.clear()
 
 t = Transform()
 

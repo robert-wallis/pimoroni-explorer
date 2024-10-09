@@ -1,21 +1,30 @@
-# Plug a BME280 breakout into Explorer 2350 and make a little indoor weather station, with barometer style descriptions.
+# Plug a Multi Sensor stick into your Pimoroni Explorer and make a little indoor weather station, with barometer style descriptions.
 
 import time
 from breakout_bme280 import BreakoutBME280
-from explorer import Explorer2350
+from pimoroni_explorer import display, i2c, BLACK, WHITE, RED
 import jpegdec
 
-# Set up the hardware
-board = Explorer2350()
-display = board.display
+# Clear all layers first
+display.set_layer(0)
+display.set_pen(BLACK)
+display.clear()
+display.set_layer(1)
+display.set_pen(BLACK)
+display.clear()
 
-bme = BreakoutBME280(board.i2c, address=0x76)
+try:
+    bme = BreakoutBME280(i2c, address=0x76)
+except RuntimeError:
+    display.set_layer(0)
+    display.set_pen(RED)
+    display.clear()
+    display.set_pen(WHITE)
+    display.text("Multi-Sensor stick not detected! :(", 10, 95, 320, 3)
+    display.update()
 
 # set up some pen colours to make drawing easier
 TEMPCOLOUR = display.create_pen(0, 0, 0)  # this colour will get changed in a bit
-WHITE = display.create_pen(255, 255, 255)
-BLACK = display.create_pen(0, 0, 0)
-RED = display.create_pen(255, 0, 0)
 GREY = display.create_pen(125, 125, 125)
 
 
@@ -106,13 +115,22 @@ try:
 except OSError:
     print("Background not found - copy backgroundforscreen.jpg to your Explorer")
 
+# attempt to display a fancy background, if the file is present
+# The background is drawn on layer 0
+if background_jpg is True:
+    display.set_layer(0)
+    j.decode(0, 0, jpegdec.JPEG_SCALE_FULL, dither=True)
+else:
+    display.set_pen(BLACK)
+    display.clear()
+
 while True:
-    # attempt to display a fancy background, if the file is present
-    if background_jpg is True:
-        j.decode(0, 0, jpegdec.JPEG_SCALE_FULL, dither=True)
-    else:
-        display.set_pen(BLACK)
-        display.clear()
+
+    # Switch the layer 1. This is where we'll draw our screen updates
+    display.set_layer(1)
+
+    display.set_pen(BLACK)
+    display.clear()
 
     # read the sensors
     temperature, pressure, humidity = bme.read()

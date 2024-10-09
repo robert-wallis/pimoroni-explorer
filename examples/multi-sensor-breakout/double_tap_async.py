@@ -1,15 +1,32 @@
 from pimoroni_explorer import display, i2c, BLACK, WHITE
 from lsm6ds3 import LSM6DS3, NORMAL_MODE_104HZ
 import asyncio
-
+import sys
 
 WIDTH, HEIGHT = display.get_bounds()
+
+# Clear all layers first
+display.set_layer(0)
+display.set_pen(BLACK)
+display.clear()
+display.set_layer(1)
+display.set_pen(BLACK)
+display.clear()
 
 # Define our own pen for the background
 BG = display.create_pen(70, 130, 180)
 
-# Create an LSM6DS3
-sensor = LSM6DS3(i2c, mode=NORMAL_MODE_104HZ)
+try:
+    # Create the I2C instance and pass that to LSM6DS3
+    sensor = LSM6DS3(i2c, mode=NORMAL_MODE_104HZ)
+except OSError:
+    # Clear the screen
+    display.set_pen(BG)
+    display.clear()
+    display.set_pen(WHITE)
+    display.text("Multi-Sensor stick not detected! :(", 10, 95, WIDTH, 3)
+    display.update()
+    sys.exit()
 
 # Text size and Offset for the drop shadow. We'll use these later!
 text_size = 10
@@ -39,6 +56,9 @@ async def main():
     await asyncio.sleep(0)
 
     while True:
+
+        # Set the layer we're going to be drawing to.
+        display.set_layer(0)
 
         # Clear the screen
         display.set_pen(BG)

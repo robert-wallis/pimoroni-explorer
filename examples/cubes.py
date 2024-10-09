@@ -1,7 +1,7 @@
 import time
 import math
 from random import randint, randrange
-from pimoroni_explorer import display, BLACK
+from pimoroni_explorer import display, BLACK, WHITE
 
 WIDTH, HEIGHT = display.get_bounds()
 
@@ -112,14 +112,27 @@ cubes = [Cube(16, 4, WIDTH / 2, HEIGHT / 2, 1.0), Cube(32, 4, 100, 100, 0.9), Cu
 # Set our initial pen colour
 pen = display.create_pen_hsv(1.0, 1.0, 1.0)
 
+# Clear all layers first
+display.set_layer(0)
+display.set_pen(BLACK)
+display.clear()
+display.set_layer(1)
+display.set_pen(BLACK)
+display.clear()
+
 while 1:
 
     # We'll use this for cycling through the rainbow
     t = time.ticks_ms() / 1000
 
+    # Set the layer we're going to be drawing to.
+    display.set_layer(0)
+
     # Clear the screen and set the pen colour for the cubes
     display.set_pen(BLACK)
     display.clear()
+    display.set_pen(WHITE)
+    display.text("Flying Cubes!", 100, 110, 320, 2)
     display.reset_pen(pen)
     pen = display.create_pen_hsv(t, 1.0, 1.0)
     display.set_pen(pen)
