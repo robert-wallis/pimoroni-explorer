@@ -1,6 +1,6 @@
 import time
 import random
-from pimoroni_explorer import display, BLACK
+from explorer import display, BLACK
 
 WIDTH, HEIGHT = display.get_bounds()
 

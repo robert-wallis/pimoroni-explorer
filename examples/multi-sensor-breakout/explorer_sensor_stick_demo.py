@@ -1,5 +1,5 @@
 # Display readings from the multi-sensor stick on the Explorer screen
-from pimoroni_explorer import display, i2c, BLACK, WHITE, RED
+from explorer import display, i2c, BLACK, WHITE, RED
 from breakout_ltr559 import BreakoutLTR559
 from lsm6ds3 import LSM6DS3
 from breakout_bme280 import BreakoutBME280

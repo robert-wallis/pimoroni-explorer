@@ -1,4 +1,4 @@
-from pimoroni_explorer import display, i2c, BLACK, WHITE
+from explorer import display, i2c, BLACK, WHITE
 from lsm6ds3 import LSM6DS3, NORMAL_MODE_104HZ
 import asyncio
 import sys

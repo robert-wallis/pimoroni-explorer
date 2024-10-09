@@ -1,7 +1,7 @@
 import time
 import math
 from random import randint, randrange
-from pimoroni_explorer import display, BLACK, WHITE
+from explorer import display, BLACK, WHITE
 
 WIDTH, HEIGHT = display.get_bounds()
 

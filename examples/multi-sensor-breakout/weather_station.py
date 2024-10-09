@@ -2,7 +2,7 @@
 
 import time
 from breakout_bme280 import BreakoutBME280
-from pimoroni_explorer import display, i2c, BLACK, WHITE, RED
+from explorer import display, i2c, BLACK, WHITE, RED
 import jpegdec
 
 # Clear all layers first

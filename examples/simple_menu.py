@@ -1,5 +1,5 @@
 import time
-from pimoroni_explorer import display, button_a, button_x, button_y, RED, GREEN, BLUE, MAGENTA, BLACK, WHITE
+from explorer import display, button_a, button_x, button_y, RED, GREEN, BLUE, MAGENTA, BLACK, WHITE
 
 WIDTH, HEIGHT = display.get_bounds()
 

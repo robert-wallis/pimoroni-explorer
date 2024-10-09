@@ -1,6 +1,6 @@
 import time
 from lsm6ds3 import LSM6DS3, NORMAL_MODE_104HZ
-from pimoroni_explorer import display, i2c, button_a, button_b, button_c, button_x, button_z, BLACK, WHITE, RED, GREEN, BLUE
+from explorer import display, i2c, button_a, button_b, button_c, button_x, button_z, BLACK, WHITE, RED, GREEN, BLUE
 
 WIDTH, HEIGHT = display.get_bounds()
 

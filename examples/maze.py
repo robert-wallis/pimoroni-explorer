@@ -9,7 +9,7 @@ RIGHT - Z
 
 '''
 
-from pimoroni_explorer import display, BLACK, WHITE, GREEN, button_a, button_b, button_c, button_z
+from explorer import display, BLACK, WHITE, GREEN, button_a, button_b, button_c, button_z
 import time
 
 WIDTH, HEIGHT = display.get_bounds()
