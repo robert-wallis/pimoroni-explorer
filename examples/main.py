@@ -4,7 +4,7 @@ import gc
 import time
 from os import listdir
 import pngdec
-from pimoroni_explorer import display, button_a, button_x, button_y, BLACK, WHITE
+from explorer import display, button_a, button_x, button_y, BLACK, WHITE
 
 
 def hsv_to_rgb(h: float, s: float, v: float) -> tuple[float, float, float]:

@@ -4,7 +4,7 @@ Reads an analog input connected to ADC0.
 Connect the middle pin of your potentiometer to ADC0, and the other two pins to 3.3V and GND.
 """
 
-from pimoroni_explorer import display, ADC_0_PIN, BLACK, WHITE
+from explorer import display, ADC_0_PIN, BLACK, WHITE
 from machine import ADC
 import time
 import math

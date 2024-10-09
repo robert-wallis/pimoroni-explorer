@@ -8,7 +8,7 @@ Note that if you're using our square buttons, you should connect wires to two pi
 
 from machine import Pin
 import time
-from pimoroni_explorer import display, BLACK, BLUE, YELLOW, RED, WHITE
+from explorer import display, BLACK, BLUE, YELLOW, RED, WHITE
 
 yellow_button = Pin(0, Pin.IN, Pin.PULL_UP)
 blue_button = Pin(1, Pin.IN, Pin.PULL_UP)

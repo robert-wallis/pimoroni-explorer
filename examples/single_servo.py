@@ -3,7 +3,7 @@ Demonstrates how to control a single servo on Explorer.
 """
 import time
 import math
-from pimoroni_explorer import display, servos, SERVO_1, button_a, BLACK, WHITE
+from explorer import display, servos, SERVO_1, button_a, BLACK, WHITE
 from micropython import const
 
 BG = display.create_pen(255, 99, 71)

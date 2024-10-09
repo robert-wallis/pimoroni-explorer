@@ -1,6 +1,6 @@
 import time
 import math
-from pimoroni_explorer import servos
+from explorer import servos
 
 """
 Demonstrates how to control all of the servos on Explorer.

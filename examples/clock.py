@@ -1,7 +1,7 @@
 import gc
 import time
 import pngdec
-from pimoroni_explorer import display, button_a, BLACK
+from explorer import display, button_a, BLACK
 from picovector import ANTIALIAS_X16, PicoVector, Polygon, Transform
 
 DIGITAL = True

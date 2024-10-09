@@ -2,7 +2,7 @@
 This example shows you a simple, non-interrupt way of reading Pico Explorer's buttons with a loop that checks to see if buttons are pressed.
 """
 import time
-from pimoroni_explorer import button_a, button_b, button_c, button_x, button_y, button_z, display, WHITE, CYAN, MAGENTA, YELLOW, GREEN, BLACK, BLUE, RED
+from explorer import button_a, button_b, button_c, button_x, button_y, button_z, display, WHITE, CYAN, MAGENTA, YELLOW, GREEN, BLACK, BLUE, RED
 
 
 # A little function to save ourselves some time doing the drop shadows :)

@@ -1,5 +1,5 @@
 import time
-from pimoroni_explorer import display, play_silence, play_tone, set_volume, stop_playing, button_x, WHITE, BLACK
+from explorer import display, play_silence, play_tone, set_volume, stop_playing, button_x, WHITE, BLACK
 
 """
 This example shows you how you can use Explorer's audio output

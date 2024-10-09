@@ -1,4 +1,4 @@
-from pimoroni_explorer import display, BLACK
+from explorer import display, BLACK
 import jpegdec
 
 # Clear all layers first

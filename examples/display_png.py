@@ -1,6 +1,6 @@
 # Display a PNG image on Pimoroni Explorer
 
-from pimoroni_explorer import display, BLACK
+from explorer import display, BLACK
 import pngdec
 import gc
 
