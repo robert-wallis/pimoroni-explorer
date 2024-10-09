@@ -34,6 +34,7 @@ class PALETTE(object):
         self.selected_colour_2 = []
         self.mixed_colour = []
         self.mixed_pen = WHITE
+        self.selected = [0, 0, 0]
 
     def add_colour(self, colour):
 
@@ -48,6 +49,7 @@ class PALETTE(object):
         self.selected_colour_2 = []
         self.mixed_colour = []
         self.mixed_pen = WHITE
+        self.selected = [0, 0, 0]
 
     def mix_colours(self):
 
@@ -59,19 +61,22 @@ class PALETTE(object):
 
         if button_a.value() == 0:
             self.add_colour([255, 0, 0])
-            time.sleep(0.1)
+            self.selected[0] = True
+            time.sleep(0.15)
 
         if button_b.value() == 0:
             self.add_colour([0, 255, 0])
-            time.sleep(0.1)
+            self.selected[1] = True
+            time.sleep(0.15)
 
         if button_c.value() == 0:
             self.add_colour([0, 0, 255])
-            time.sleep(0.1)
+            self.selected[2] = True
+            time.sleep(0.15)
 
         if button_x.value() == 0:
             self.clear_colours()
-            time.sleep(0.1)
+            time.sleep(0.15)
 
         if button_z.value() == 0:
             self.mix_colours()
@@ -91,20 +96,29 @@ class PALETTE(object):
         display.clear()
 
         display.set_pen(RED)
-        display.rectangle(0, 25, 29, 29)
-        display.circle(30, 39, 14)
+        if self.selected[0]:
+            display.rectangle(0, 25, 50, 29)
+            display.circle(49, 39, 14)
+        else:
+            display.rectangle(0, 25, 29, 29)
+            display.circle(30, 39, 14)
 
         display.set_pen(GREEN)
-        display.rectangle(0, 102, 29, 29)
-        display.circle(30, 116, 14)
+        if self.selected[1]:
+            display.rectangle(0, 102, 50, 29)
+            display.circle(49, 116, 14)
+        else:
+            display.rectangle(0, 102, 29, 29)
+            display.circle(30, 116, 14)
 
         display.set_pen(BLUE)
-        display.rectangle(0, 178, 29, 29)
-        display.circle(30, 192, 14)
 
-        display.set_pen(BLUE)
-        display.rectangle(0, 178, 29, 29)
-        display.circle(30, 192, 14)
+        if self.selected[2]:
+            display.rectangle(0, 178, 50, 29)
+            display.circle(49, 192, 14)
+        else:
+            display.rectangle(0, 178, 29, 29)
+            display.circle(30, 192, 14)
 
         display.set_pen(BLACK)
         display.rectangle(135 + 2, 75 + 2, 100, 100)
