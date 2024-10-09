@@ -1,29 +1,11 @@
 import time
-from machine import I2C, Pin
 from lsm6ds3 import LSM6DS3, NORMAL_MODE_104HZ
-from picographics import PicoGraphics, DISPLAY_EXPLORER, PEN_P8
+from pimoroni_explorer import display, i2c, button_a, button_b, button_c, button_x, button_z, BLACK, WHITE, RED, GREEN, BLUE
 
-display = PicoGraphics(display=DISPLAY_EXPLORER, pen_type=PEN_P8)
 WIDTH, HEIGHT = display.get_bounds()
 
-# Some colours we'll need later on
-WHITE = display.create_pen(255, 255, 255)
-BLACK = display.create_pen(0, 0, 0)
-RED = display.create_pen(255, 0, 0)
-GREEN = display.create_pen(0, 255, 0)
-BLUE = display.create_pen(0, 0, 255)
-BG = WHITE
-
-# Create the I2C instance and pass that to LSM6DS3
-i2c = I2C(0, scl=21, sda=20)
+# Setup the LSM6DS3
 sensor = LSM6DS3(i2c, mode=NORMAL_MODE_104HZ)
-
-# Setup the pins used by the Buttons
-button_a = Pin(16, Pin.IN, Pin.PULL_UP)
-button_b = Pin(15, Pin.IN, Pin.PULL_UP)
-button_c = Pin(14, Pin.IN, Pin.PULL_UP)
-button_x = Pin(17, Pin.IN, Pin.PULL_UP)
-button_z = Pin(19, Pin.IN, Pin.PULL_UP)
 
 
 class PALETTE(object):
@@ -83,7 +65,7 @@ class PALETTE(object):
 
     def draw(self):
         # Clear the screen
-        display.set_pen(BG)
+        display.set_pen(WHITE)
         display.clear()
 
         display.set_pen(RED)
