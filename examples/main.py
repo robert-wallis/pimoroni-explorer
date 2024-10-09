@@ -87,15 +87,15 @@ def menu() -> str:
         if button_x.value() == 0:
             target_scroll_position -= 1
             target_scroll_position = target_scroll_position if target_scroll_position >= 0 else len(applications) - 1
-            time.sleep(0.05)
+            time.sleep(0.08)
 
         if button_y.value() == 0:
             target_scroll_position += 1
             target_scroll_position = target_scroll_position if target_scroll_position < len(applications) else 0
-            time.sleep(0.05)
+            time.sleep(0.08)
 
         if button_a.value() == 0:
-            time.sleep(0.05)
+            time.sleep(0.08)
 
             return applications[selected_item]["file"]
 
