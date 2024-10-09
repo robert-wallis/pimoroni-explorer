@@ -43,7 +43,7 @@ def show_image(n):
     gc.collect()
     file = IMAGES[n]
     name, ext = file.split(".")
-    
+
     display.set_pen(BACKGROUND)
     display.clear()
 
@@ -54,7 +54,7 @@ def show_image(n):
         jpeg.open_file("/{}".format(file))
         jpeg.decode()
 
-    if SHOW_INFO == True:
+    if SHOW_INFO is True:
         label = f"{name} ({ext})"
         name_length = display.measure_text(label, 0.5)
         display.set_pen(BLACK)
@@ -75,6 +75,7 @@ def show_image(n):
 
     display.update()
 
+
 changed = True
 
 if TOTAL_IMAGES == 0:
@@ -83,9 +84,9 @@ if TOTAL_IMAGES == 0:
     display.set_pen(WHITE)
     display.text("To run this demo, upload some .jpg or .png files to Explorer.", 0, 0, WIDTH, 3)
     display.update()
-    
+
 else:
-    while True:    
+    while True:
         if button_x.value() == 0:
             if CURRENT_IMAGE > 0:
                 CURRENT_IMAGE -= 1
@@ -95,11 +96,11 @@ else:
             if CURRENT_IMAGE < TOTAL_IMAGES - 1:
                 CURRENT_IMAGE += 1
                 changed = True
-        
+
         if button_a.value() == 0:
             BACKGROUND = WHITE
             changed = True
-            
+
         if button_b.value() == 0:
             BACKGROUND = BLACK
             changed = True
@@ -111,4 +112,3 @@ else:
         if changed:
             show_image(CURRENT_IMAGE)
             changed = False
-
