@@ -6,6 +6,8 @@ from os import listdir
 import pngdec
 from explorer import display, button_z, button_x, button_y, BLACK, WHITE
 
+last_button_press = time.ticks_ms()
+
 
 def hsv_to_rgb(h: float, s: float, v: float) -> tuple[float, float, float]:
     if s == 0.0:
@@ -32,6 +34,18 @@ def hsv_to_rgb(h: float, s: float, v: float) -> tuple[float, float, float]:
         return t, p, v
     if i == 5:
         return v, p, q
+
+
+def debounce(button, debounce_ms=200):
+    global last_button_press
+    try:
+        value = button.value() == 0
+        if value and time.ticks_ms() - last_button_press > debounce_ms:
+            last_button_press = time.ticks_ms()
+            return True
+    except NameError:
+        last_button_press = time.ticks_ms()
+    return False
 
 
 def get_applications() -> list[dict[str, str]]:
@@ -84,19 +98,15 @@ def menu() -> str:
 
     while True:
 
-        if button_x.value() == 0:
+        if debounce(button_x):
             target_scroll_position -= 1
             target_scroll_position = target_scroll_position if target_scroll_position >= 0 else len(applications) - 1
-            time.sleep(0.08)
 
-        if button_y.value() == 0:
+        if debounce(button_z):
             target_scroll_position += 1
             target_scroll_position = target_scroll_position if target_scroll_position < len(applications) else 0
-            time.sleep(0.08)
 
-        if button_z.value() == 0:
-            time.sleep(0.08)
-
+        if debounce(button_y):
             return applications[selected_item]["file"]
 
         scroll_position += (target_scroll_position - scroll_position) / 5
@@ -111,9 +121,9 @@ def menu() -> str:
 
         # Draw some markers on screen so you know which buttons to press :)
         display.set_pen(WHITE)
-        display.triangle(300, 42, 290, 55, 310, 55)
-        display.triangle(300, 130, 290, 117, 310, 117)
-        display.rectangle(293, 190, 15, 15)
+        display.triangle(303, 42, 293, 55, 313, 55)
+        display.rectangle(295, 114, 16, 16)
+        display.triangle(303, 205, 293, 191, 313, 191)
 
         for list_index, application in enumerate(applications):
             distance = list_index - scroll_position
