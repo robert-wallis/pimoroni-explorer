@@ -4,7 +4,7 @@ import gc
 import time
 from os import listdir
 import pngdec
-from explorer import display, button_a, button_x, button_y, BLACK, WHITE
+from explorer import display, button_z, button_x, button_y, BLACK, WHITE
 
 
 def hsv_to_rgb(h: float, s: float, v: float) -> tuple[float, float, float]:
@@ -87,15 +87,15 @@ def menu() -> str:
         if button_x.value() == 0:
             target_scroll_position -= 1
             target_scroll_position = target_scroll_position if target_scroll_position >= 0 else len(applications) - 1
-            time.sleep(0.05)
+            time.sleep(0.08)
 
         if button_y.value() == 0:
             target_scroll_position += 1
             target_scroll_position = target_scroll_position if target_scroll_position < len(applications) else 0
-            time.sleep(0.05)
+            time.sleep(0.08)
 
-        if button_a.value() == 0:
-            time.sleep(0.05)
+        if button_z.value() == 0:
+            time.sleep(0.08)
 
             return applications[selected_item]["file"]
 
@@ -108,6 +108,12 @@ def menu() -> str:
         display.set_layer(1)
         display.set_pen(BLACK)
         display.clear()
+
+        # Draw some markers on screen so you know which buttons to press :)
+        display.set_pen(WHITE)
+        display.triangle(300, 42, 290, 55, 310, 55)
+        display.triangle(300, 130, 290, 117, 310, 117)
+        display.rectangle(293, 190, 15, 15)
 
         for list_index, application in enumerate(applications):
             distance = list_index - scroll_position
