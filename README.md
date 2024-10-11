@@ -1,20 +1,22 @@
-# Explorer
+# Explorer <!-- omit in toc -->
 
-This repository is home to the Explorer MicroPython fimrware and examples. 
+This repository is home to the Explorer MicroPython fimrware and examples.
 
-Explorer is a electronic adventure playground for physical computing, built around the RP2350B. Includes a 2.8" LCD screen, a speaker, a mini breadboard, and much more!
+Explorer is a MicroPython-powered electronic adventure playground for physical computing, built around the RP2350B.
 
 Grab yours at https://shop.pimoroni.com/products/explorer
 
-- [Explorer](#explorer)
-  - [Download MicroPython for Explorer](#download-micropython-for-explorer)
+- [Introduction](#introduction)
+- [Download MicroPython for Explorer](#download-micropython-for-explorer)
 - [Flashing The Firmware](#flashing-the-firmware)
 - [Examples](#examples)
 - [Documentation](#documentation)
 
-## Download MicroPython for Explorer
+# Introduction
 
 Explorer comes pre-flashed with MicroPython, our own custom drivers/libraries and a range of examples to get you started. MicroPython support for the RP2350B is currently a work-in-progress, so you should be prepared to update as we make fixes and improvements!
+
+# Download MicroPython for Explorer
 
 To upgrade, grab the latest release from https://github.com/pimoroni/explorer/releases/latest
 
@@ -23,7 +25,7 @@ There are two choices of firmware:
 * explorer-vX.X.X-micropython-with-filesystem.uf2 :warning:  (recommended) - A full update package including examples and the explorer library
 * explorer-vX.X.X-micropython.uf2 - a firmware-only update, that will leave your filesystem alone!
 
-:warning: If you flash the `with-filesystem` version, the contents of your Explorer board will be erased- so make sure to back up your own code first. Alternatively you can flash the firmware-only build and manually copy the files in [examples/lib](examples/libs)
+:warning: If you flash the `with-filesystem` version, the contents of your Explorer board will be erased- so make sure to back up your own code first. Alternatively you can flash the firmware-only build and manually copy the files in [examples/lib](examples/lib)
 
 # Flashing The Firmware
 
