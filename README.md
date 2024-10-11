@@ -1,19 +1,41 @@
-# Pimoroni PGA Boilerplate
+# Explorer
 
-This repository is intended to provide a baseline MicroPython build for PGA2040
-and PGA2350, in addition to being a minimal example of how you might set up your
-own custom MicroPython flavour to support your PGA-based project.
+This repository is home to the Explorer MicroPython fimrware and examples. 
 
-Use this repository as a boilerplate to set up your own project, and GitHub actions
-should automatically handle building MicroPython for you.
+Explorer is a electronic adventure playground for physical computing, built around the RP2350B. Includes a 2.8" LCD screen, a speaker, a mini breadboard, and much more!
 
-## Contents
+Grab yours at https://shop.pimoroni.com/products/explorer
 
-* pga2040 - MicroPython and Pico SDK board definitions for PGA2040
-* pga2350 - MicroPython and Pico SDK board definitions for PGA2350, with PSRAM variant
-* modules/c/example - An example MicroPython C++ module, demonstrating C class bindings
-* modules/py_frozen - Python files intended to be frozen into the firmware
-* modules/py_littlefs - Python files intended to be visible/editable in the LittleFS user filesystem
-* modules/default.py - The MicroPython manifest file, for specifying frozen libs
-* modules/default.txt - The dir2uf2 LittleFS manifest file, for specifying included files
-* modules/default.cmake - The MicroPython USER_C_MODULES file, for specifying included C/C++ modules
+- [Explorer](#explorer)
+  - [Download MicroPython for Explorer](#download-micropython-for-explorer)
+- [Flashing The Firmware](#flashing-the-firmware)
+- [Examples](#examples)
+- [Documentation](#documentation)
+
+## Download MicroPython for Explorer
+
+Explorer comes pre-flashed with MicroPython, our own custom drivers/libraries and a range of examples to get you started. MicroPython support for the RP2350B is currently a work-in-progress, so you should be prepared to update as we make fixes and improvements!
+
+To upgrade, grab the latest release from https://github.com/pimoroni/explorer/releases/latest
+
+There are two choices of firmware:
+
+* explorer-vX.X.X-micropython-with-filesystem.uf2 :warning:  (recommended) - A full update package including examples and the explorer library
+* explorer-vX.X.X-micropython.uf2 - a firmware-only update, that will leave your filesystem alone!
+
+:warning: If you flash the `with-filesystem` version, the contents of your Explorer board will be erased- so make sure to back up your own code first. Alternatively you can flash the firmware-only build and manually copy the files in [examples/lib](examples/libs)
+
+# Flashing The Firmware
+
+1. Connect Explorer to your computer with a USB Type-C cable
+2. Put your Explorer into bootloader mode by holding down "BOOT", the second button from the left when holding Explorer with the screen facing away from you. Keep holding "BOOT" and press "RESET", the button next to "BOOT".
+3. Drag and drop your chosen `.uf2` file onto the `RP2350` drive that appears.
+4. Your board should reset and, if you used the `with-filesystemz build, should dipslay a menu of examples.
+
+# Examples
+
+We've tried to cover all the bases with some simple examples to get you started. See [examples/README.md](examples/README.md) for more information.
+
+# Documentation
+
+To help you get started we've created a function refernece. See [docs/reference.md](docs/reference.md)
