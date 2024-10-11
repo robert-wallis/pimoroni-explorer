@@ -24,6 +24,7 @@ It's split into three main sections for your convenience:
   - [Setup \& Anti-aliasing](#setup--anti-aliasing)
   - [Shapes \& Primitives](#shapes--primitives)
   - [Fonts \& Text](#fonts--text)
+  - [Transforms](#transforms)
 
 # Explorer Library
 
@@ -218,12 +219,92 @@ We use two layers by default, since that extra layer is handy for static backgro
 
 ## JPEG Decoding
 
+Sometimes it's easy just to grab a JPEG file from somewhere, squash it down and display it on your screen. You can rely on JPEGs lossy compression to help fit more images on your flash storage.
+
+You can find documentation for the JPEG decoder in our [PicoGraphics reference](https://github.com/pimoroni/pimoroni-pico/tree/main/micropython/modules/picographics#jpeg-files).
+
 ## PNG Decoding
+
+More often than not you want your image to look exactly as you intended it, without ugly compression artifacts and distortion. This is particularly useful for icons and interface elements- for which you should use the PNG format and aim for a palette mode image with as few colours as you can represent your artwork in.
+
+You can find documentation for PNG decoder in our [PicoGraphics reference](
+https://github.com/pimoroni/pimoroni-pico/tree/main/micropython/modules/picographics#png-files).
 
 # PicoVector
 
+Explorer includes our new and improved PicoVector library, bringing vector graphics and text along with it.
+
 ## Setup & Anti-aliasing
+
+The first step is to create a PicoVector instance:
+
+```python
+from picovector import PicoVector
+
+vector = PicoVector(explorer.display)
+```
+
+You should then pick an anti-aliasing method. Anti-aliasing is the technique that turns harsh, pixellated edges into a smooth transition between elements. You probably look at it all day without realising, and on Explorer there's a very real tradeoff between speed and anti-aliasing quality. You can pick one of:
+
+* `ANTIALIAS_NONE` - Turn off anti-aliasing altogether
+* `ANTIALIAS_FAST` - A nice balance between none, and best
+* `ANTIALIAS_BEST` - High quality x16 anti-aliasing
+
+And set it with:
+
+```python
+from picovector import PicoVector, ANTIALIAS_BEST
+
+vector = PicoVector(explorer.display)
+vector.set_antialiasing(ANTIALIAS_BEST)
+```
 
 ## Shapes & Primitives
 
+PicoVector is built around polygons, which is really a collection of arbitrary paths that describe a shape. You create a shape by adding predefined primitives to you "Polygon", these are:
+
+* `rectangle(x, y, w, h [, (corners), stroke])` - A rectangle, with a optional tuple of four corner radii or a stroke width to convert it into an outline
+* `regular(x, y, radius, sides [, stroke])` - A regular polygon. Starts as a triangle and converges to a circle. Providing a stroke with makes it an outline.
+* `path((x, y), (x, y), (x, y), ...)` - A closed path consisting of at least three points (two would be an invisible line!)
+* `circle(x, y, radius [, stroke])` - A circle, with optional stroke to make it an outline
+* `arc(x, y, radius, from, to [, stroke])` - A circular arc between the angles from and to
+
 ## Fonts & Text
+
+* `set_font(filename)` - Load an `.af` font from flash.
+* `set_font_size(size)` - What units are we using here? TODO: Maybe we need to normalise this somehow!
+* `set_font_word_spacing(spacing)` - The worst named function ever! Sets the space between words.
+* `set_font_letter_spacing(spacing)` - Sets the space between letters.
+* `set_font_line_height(spacing)` - Sets the text line-height.
+* `set_font_align(spacing)` - Sets the text alignment, for reasons currently only *horizontal* alignment works. Remind me to fix this!
+
+## Transforms
+
+Every time you draw something with PicoVector, it's affected by the `transform` you've set. This is how you rotate, scale and translate your shapes to position them on the screen.
+
+* `transform = Transform()` - Create a new transform
+* `transform.rotate(angle degrees, (origin_x, origin_y))`
+* `transform.scale(scale_x, scale_y)`
+* `transform.translate(translate_x, translate_y)`
+* `transform.reset()`
+
+To create a new transform you should create it, apply it to your vector instance and add some transformations:
+
+```python
+from picovector import PicoVector, Transform
+
+vector = PicoVector(explorer.display)
+transform = Transform()
+vector.set_transform(transform)
+
+transform.rotate(90, (0, 0))
+transform.scale(10)
+```
+
+For a clean slate, you can reset your transform back to its original state:
+
+```python
+transform.reset()
+```
+
+Transformations can be a little confusing
