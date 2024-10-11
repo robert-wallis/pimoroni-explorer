@@ -1,6 +1,6 @@
 # Explorer <!-- omit in toc -->
 
-This repository is home to the Explorer MicroPython fimrware and examples.
+This repository is home to the Explorer MicroPython firmware and examples.
 
 Explorer is a MicroPython-powered electronic adventure playground for physical computing, built around the RP2350B.
 
@@ -32,7 +32,7 @@ There are two choices of firmware:
 1. Connect Explorer to your computer with a USB Type-C cable
 2. Put your Explorer into bootloader mode by holding down "BOOT", the second button from the left when holding Explorer with the screen facing away from you. Keep holding "BOOT" and press "RESET", the button next to "BOOT".
 3. Drag and drop your chosen `.uf2` file onto the `RP2350` drive that appears.
-4. Your board should reset and, if you used the `with-filesystemz build, should dipslay a menu of examples.
+4. Your board should reset and, if you used the `with-filesystem build, should display a menu of examples.
 
 # Examples
 
@@ -40,4 +40,4 @@ We've tried to cover all the bases with some simple examples to get you started.
 
 # Documentation
 
-To help you get started we've created a function refernece. See [docs/reference.md](docs/reference.md)
+To help you get started we've created a function reference. See [docs/reference.md](docs/reference.md)

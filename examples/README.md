@@ -34,7 +34,7 @@ The async version uses `asyncio.create_task` to poll for a tap event. Keeps your
 
 Another example for our [multi sensor stick](https://shop.pimoroni.com/products/multi-sensor-stick). Uh, sorry. I guess this is a bit of an upsell. But it's three pretty cool sensors in one... and not a bag of virtual gems!
 
-Displays light, acceleromater and temperature data!
+Displays light, accelerometer and temperature data!
 
 # external_buttons.py
 
@@ -46,7 +46,7 @@ At a loss for what to do with your Explorer. Clock just not your cup of tea? How
 
 # marker.py
 
-If you haven't Google'd "permenant marker font" yet, you really should. It's about the only worthwhile thing Google.com still does.
+If you haven't Google'd "permanent marker font" yet, you really should. It's about the only worthwhile thing Google.com still does.
 
 # maze.py
 
