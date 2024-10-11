@@ -29,13 +29,6 @@ It's split into three main sections for your convenience:
 
 The [explorer library](examples/lib/explorer.py) is a wrapper around some of Explorer's particulars. It aims to get you set up with a PicoGraphics surface for drawing, and help you find the right pins for the many inputs and outputs.
 
-It defines a few values that you'll probably use most:
-
-* `i2c` - A `machine.I2C` compatible I2C instance for I2C devices connected to the Qw/St socket
-* `audio_pwm` - A `machine.PWM` instance to drive the piezo for beeps and boops
-* `servos` - A list containing four `Servo` instances for driving the four servo connectors
-* `display` - A PicoGraphics instance, configured in RGB565 pen mode with two drawing layers
-
 ## Getting Started
 
 To start coding your Pimoroni Explorer, you will need to add the following line to the start of your code file:
@@ -64,6 +57,8 @@ SERVO_4 = 3
 
 ### Count Constants
 
+These handy constants tell you how many of something Explorer has.
+
 ```python
 NUM_GPIOS = 6
 NUM_ADCS = 6
@@ -73,18 +68,52 @@ NUM_SWITCHES = 6
 
 ### Colour Constants
 
+These are RGB565 colours for Explorer's default PicoGraphics instance.
+
 ```python
-WHITE = 65535
-BLACK = 0
-CYAN = 65287
-MAGENTA = 8184
-YELLOW = 57599
-GREEN = 57351
-RED = 248
-BLUE = 7936
+WHITE = 65535   # 255, 255, 255
+BLACK = 0       # 0,   0,   0
+CYAN = 65287    # 0,   255, 255
+MAGENTA = 8184  # 255, 0,   255
+YELLOW = 57599  # 255, 255, 0
+GREEN = 57351   # 0,   255, 0
+RED = 248       # 255, 0,   0
+BLUE = 7936     # 0,   0,   255
 ```
 
+If you're wondering how these baffling numbers are arrived at, we start with three 8-bit values for Red, Green and Blue:
+
+```
+red = RRRRRRRR 
+green = GGGGGGGG
+blue = BBBBBBBB
+```
+
+Then we chop them down to 5, 6 and 5 bits respectively:
+
+```
+red = RRRRR
+green = GGGGGG
+blue = BBBBBB
+```
+
+And stick them together:
+
+```
+rgb565 = RRRRRGGGGGGBBBBB
+```
+
+And byteswap them (swap the lower 8 bits with the upper 8 bits, for reasons):
+
+```
+rgb565 = GGGBBBBBRRRRRGGG
+```
+
+And that's why 255 red, or `0b0000000011111000` equals 248.
+
 ### Pin Constants
+
+Constants for all the pins you might need to access on Explorer:
 
 ```python
 SWITCH_A_PIN = 16
@@ -130,6 +159,15 @@ DEFAULT_VOLUME = 0.2
 
 ### Variables
 
+Defines a few values that you'll probably use most:
+
+* `i2c` - A `machine.I2C` compatible I2C instance for I2C devices connected to the Qw/St socket
+* `audio_pwm` - A `machine.PWM` instance to drive the piezo for beeps and boops
+* `servos` - A list containing four `Servo` instances for driving the four servo connectors
+* `display` - A PicoGraphics instance, configured in RGB565 pen mode with two drawing layers
+* `button_<BTN>` - A collection of six `machine.Pin` instances for reading the onboard button
+* `button_user` - A `machine.Pin` instance for reading the user / boot button
+
 ```python
 i2c: PimoroniI2C
 audio_pwm: PWM
@@ -159,7 +197,7 @@ mute_audio(value: bool=True) -> None
 
 # PicoGraphics
 
-Explorer, like all of our display products, uses our in-hour framebuffer graphics library - PicoGraphics.
+Explorer, like all of our display products, uses our in-house framebuffer graphics library - PicoGraphics.
 
 PicoGraphics is a wrapper around a big ol' chunk of RAM, which corresponds to the pixels on an attached display. By default, Explorer is configured in RGB565 mode which corresponds to two bytes per pixel, or 5 bits of red, 6 bits of green and 5 bits of blue respectively. It's also known as 65k colour, and does a pretty good job of making pretty pictures at half (rather than 2/3rds) the RAM cost (for awkward technical reasons) of RGB888.
 
