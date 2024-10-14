@@ -38,7 +38,11 @@ To start coding your Pimoroni Explorer, you will need to add the following line 
 import explorer
 ```
 
-...
+Alternatively you can import only what you plan to use in your code like so:
+
+```python
+from explorer import display, i2c, button_a
+```
 
 ## Reading the Switches
 
