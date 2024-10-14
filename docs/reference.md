@@ -42,7 +42,7 @@ import explorer
 
 ## Reading the Switches
 
-Import the initilised Pin objects from the explorer library.
+Import the initialized Pin objects from the explorer library.
 
 ```python
 from explorer import button_a, button_b, button_c, button_x, button_y, button_z, button_user
