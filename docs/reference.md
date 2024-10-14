@@ -230,7 +230,7 @@ PicoGraphics is a wrapper around a big ol' chunk of RAM, which corresponds to th
 
 ## Basic Drawing Functions
 
-Since there are many, many things you can do with PicoGraphics that would be silly to repeat here, I'll send you over to our main MicroPython repository for [a full PicoGraphics function reference.][https://github.com/pimoroni/pimoroni-pico/blob/main/micropython/modules/picographics/README.md#function-reference]
+Since there are many, many things you can do with PicoGraphics that would be silly to repeat here, I'll send you over to our main MicroPython repository for [a full PicoGraphics function reference][https://github.com/pimoroni/pimoroni-pico/blob/main/micropython/modules/picographics/README.md#function-reference]
 
 ## Changing The Display Mode
 
