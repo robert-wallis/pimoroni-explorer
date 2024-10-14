@@ -42,7 +42,29 @@ import explorer
 
 ## Reading the Switches
 
-...
+Import the initilised Pin objects from the explorer library.
+
+```python
+from explorer import button_a, button_b, button_c, button_x, button_y, button_z, button_user
+```
+You can read the value of the a button using the Pin function `.value()` The buttons are Active Low. So you'll read `0` when the button is being pressed and `1` when it isn't!
+
+The example below prints out the string `Pressed!` when it detects that Button A has been pressed
+
+```python
+from explorer import button_a
+import time
+
+while True:
+
+    if button_a.value() == 0:
+        print("Pressed!")
+    else:
+        print("Not Pressed")
+
+    time.sleep(1)
+
+```
 
 
 ## `explorer` Reference
