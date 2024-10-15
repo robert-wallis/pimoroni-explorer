@@ -40,6 +40,14 @@ Displays light, accelerometer and temperature data!
 
 Gotta put something on that little breadboard, right! How about more buttons. You can never have enough buttons. The ones they keep taking out of cars must go somewhere!?
 
+# external_leds.py
+
+More bling for your breadboard! If you liked it then you should have put an LED on it.
+
+# external_rgb_led.py
+
+What's better than an ordinary LED? A RGB LED! (it's actually three teeny tiny ordinary LEDs smooshed together, but don't tell anyone!)
+
 # image_gallery.py
 
 At a loss for what to do with your Explorer. Clock just not your cup of tea? How about a digital photo frame! Those are still cool, right?
