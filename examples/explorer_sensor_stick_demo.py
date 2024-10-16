@@ -29,10 +29,11 @@ while True:
 
     # Set the layer we're going to be drawing to.
     display.set_layer(0)
-
-    lux, _, _, _, _, _, prox = ltr.get_reading()
+    # Read all the sensors
+    prox, _, _, _, _, _, lux = ltr.get_reading()
     ax, ay, az, gx, gy, gz = lsm.get_readings()
     temperature, pressure, humidity = bme.read()
+    # Draw readings on the screen
     display.set_pen(BLACK)
     display.clear()
     display.set_pen(WHITE)
