@@ -1,160 +1,333 @@
-'''
-Maze game for Pimoroni Explorer
+import gc
+import random
+import time
+from collections import namedtuple
+
+from explorer import display, BLACK, WHITE, GREEN, RED, button_a, button_b, button_c, button_z, button_x
+
+"""
+Navigate a set of mazes from the start (red) to the goal (green).
+Mazes get bigger / harder with each increase in level.
 
 Controls:
-UP - A
-DOWN - B
-LEFT - C
-RIGHT - Z
+* A = Move Forward
+* B = Move Backward
+* Z = Move Right
+* C = Move left
+* X = Continue (once the current level is complete)
+"""
 
-'''
+# General Constants
+BRIGHTNESS = 1.0                            # The brightness of the LCD backlight (from 0.0 to 1.0)
 
-from explorer import display, BLACK, WHITE, GREEN, button_a, button_b, button_c, button_z
-import time
+# Colour Constants (RGB565)
+PLAYER = display.create_pen(227, 231, 110)
+WALL = display.create_pen(127, 125, 244)
+BACKGROUND = display.create_pen(60, 57, 169)
+PATH = display.create_pen((227 + 60) // 2, (231 + 57) // 2, (110 + 169) // 2)
 
+# Gameplay Constants
+Position = namedtuple("Position", ("x", "y"))
+MIN_MAZE_WIDTH = 2
+MAX_MAZE_WIDTH = 5
+MIN_MAZE_HEIGHT = 2
+MAX_MAZE_HEIGHT = 5
+WALL_SHADOW = 2
+WALL_GAP = 1
+TEXT_SHADOW = 2
+MOVEMENT_SLEEP = 0.1
+DIFFICULT_SCALE = 0.5
+
+complete = False                                # Has the game been completed?
+level = 0                                       # The current "level" the player is on (affects difficulty)
+
+# Get the width and height from the display
 WIDTH, HEIGHT = display.get_bounds()
 
-# Set some colours to use later.
-WALL = display.create_pen(127, 125, 244)
-PATH = display.create_pen(60, 57, 169)
-PLAYER = display.create_pen(227, 231, 110)
 
-# Clear all layers first
-display.set_layer(0)
-display.set_pen(BLACK)
-display.clear()
-display.set_layer(1)
-display.set_pen(BLACK)
-display.clear()
+# Classes
+class Cell:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.bottom = True
+        self.right = True
+        self.visited = False
+
+    @staticmethod
+    def remove_walls(current, next):
+        dx, dy = current.x - next.x, current.y - next.y
+        if dx == 1:
+            next.right = False
+        if dx == -1:
+            current.right = False
+        if dy == 1:
+            next.bottom = False
+        if dy == -1:
+            current.bottom = False
 
 
-class Game(object):
+class MazeBuilder:
     def __init__(self):
+        self.width = 0
+        self.height = 0
+        self.cell_grid = []
+        self.maze = []
 
-        self.complete = False
+    def build(self, width, height):
+        if width <= 0:
+            raise ValueError("width out of range. Expected greater than 0")
 
-        # The square the player must get to.
-        self.end_location = (1, 30)
+        if height <= 0:
+            raise ValueError("height out of range. Expected greater than 0")
 
-        # Our maze, 1's are solid walls and 0's are the path we can move along.
-        # Try changing some 1s and 0s and see how the maze changes! :)
+        self.width = width
+        self.height = height
 
-        self.maze = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-                     [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
-                     [1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1],
-                     [1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
-                     [1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1],
-                     [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
-                     [1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1],
-                     [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
-                     [1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1],
-                     [1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
-                     [1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1],
-                     [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
-                     [1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1],
-                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
+        # Set the starting cell to the centre
+        cx = (self.width - 1) // 2
+        cy = (self.height - 1) // 2
 
-        # Our player object. Stores the current location and the colour of the player square.
-        self.player = Player(15, 21, PLAYER)
+        gc.collect()
 
-    def draw(self):
+        # Create a grid of cells for building a maze
+        self.cell_grid = [[Cell(x, y) for y in range(self.height)] for x in range(self.width)]
+        cell_stack = []
 
-        display.set_layer(0)
+        # Retrieve the starting cell and mark it as visited
+        current = self.cell_grid[cx][cy]
+        current.visited = True
 
-        # Clear the screen
-        display.set_pen(PATH)
-        display.clear()
-        display.set_pen(WALL)
+        # Loop until every cell has been visited
+        while True:
+            next = self.choose_neighbour(current)
+            # Was a valid neighbour found?
+            if next is not None:
+                # Move to the next cell, removing walls in the process
+                next.visited = True
+                cell_stack.append(current)
+                Cell.remove_walls(current, next)
+                current = next
 
-        # Draw the maze we have stored above.
-        # Each '1' in the array is drawn as a 10x10 pixel square.
-        for row in range(len(self.maze)):
-            for col in range(len(self.maze[row])):
+            # No valid neighbour. Backtrack to a previous cell
+            elif len(cell_stack) > 0:
+                current = cell_stack.pop()
+
+            # No previous cells, so exit
+            else:
+                break
+
+        gc.collect()
+
+        # Use the cell grid to create a maze grid of 0's and 1s
+        self.maze = []
+
+        row = [1]
+        for x in range(0, self.width):
+            row.append(1)
+            row.append(1)
+        self.maze.append(row)
+
+        for y in range(0, self.height):
+            row = [1]
+            for x in range(0, self.width):
+                row.append(0)
+                row.append(1 if self.cell_grid[x][y].right else 0)
+            self.maze.append(row)
+
+            row = [1]
+            for x in range(0, self.width):
+                row.append(1 if self.cell_grid[x][y].bottom else 0)
+                row.append(1)
+            self.maze.append(row)
+
+        self.cell_grid.clear()
+        gc.collect()
+
+        self.grid_columns = (self.width * 2 + 1)
+        self.grid_rows = (self.height * 2 + 1)
+
+    def choose_neighbour(self, current):
+        unvisited = []
+        for dx in range(-1, 2, 2):
+            x = current.x + dx
+            if x >= 0 and x < self.width and not self.cell_grid[x][current.y].visited:
+                unvisited.append((x, current.y))
+
+        for dy in range(-1, 2, 2):
+            y = current.y + dy
+            if y >= 0 and y < self.height and not self.cell_grid[current.x][y].visited:
+                unvisited.append((current.x, y))
+
+        if len(unvisited) > 0:
+            x, y = random.choice(unvisited)
+            return self.cell_grid[x][y]
+
+        return None
+
+    def maze_width(self):
+        return (self.width * 2) + 1
+
+    def maze_height(self):
+        return (self.height * 2) + 1
+
+    def draw(self, display):
+        # Draw the maze we have built. Each '1' in the array represents a wall
+        for row in range(self.grid_rows):
+            for col in range(self.grid_columns):
+                # Calculate the screen coordinates
+                x = (col * wall_separation) + offset_x
+                y = (row * wall_separation) + offset_y
+
                 if self.maze[row][col] == 1:
+                    # Draw a wall shadow
                     display.set_pen(BLACK)
-                    display.rectangle(col * 10 + 2, row * 10 + 2, 10, 10)
+                    display.rectangle(x + WALL_SHADOW, y + WALL_SHADOW, wall_size, wall_size)
+
+                    # Draw a wall top
                     display.set_pen(WALL)
-                    display.rectangle(col * 10, row * 10, 9, 9)
+                    display.rectangle(x, y, wall_size, wall_size)
 
                 if self.maze[row][col] == 2:
-                    display.set_pen(GREEN)
-                    display.rectangle(col * 10, row * 10, 9, 9)
-                    display.set_pen(WALL)
-
-        # Draw the player.
-        display.set_pen(self.player.colour)
-        display.rectangle(self.player.x * 10, self.player.y * 10, self.player.size - 1, self.player.size - 1)
-
-        # Draw the end location square
-        display.set_pen(GREEN)
-        display.rectangle(self.end_location[1] * 10, self.end_location[0] * 10, 9, 9)
-
-        if self.complete:
-            # Draw banner shadow
-            display.set_pen(BLACK)
-            display.rectangle(4, 94, WIDTH, 50)
-            # Draw banner
-            display.set_pen(PLAYER)
-            display.rectangle(0, 90, WIDTH, 50)
-
-            # Draw text shadow
-            display.set_pen(BLACK)
-            display.text("Maze Complete!", WIDTH // 6 + 2, 107, WIDTH, 3)
-
-            # Draw text
-            display.set_pen(WHITE)
-            display.text("Maze Complete!", WIDTH // 6, 105, WIDTH, 3)
-
-        # Update the screen
-        display.update()
-
-    def update(self):
-
-        if button_c.value() == 0:
-            if self.maze[self.player.y][self.player.x - 1] == 0:
-                self.player.x -= 1
-                time.sleep(0.1)
-
-        if button_z.value() == 0:
-            if self.maze[self.player.y][self.player.x + 1] == 0:
-                self.player.x += 1
-                time.sleep(0.1)
-
-        if button_a.value() == 0:
-            if self.maze[self.player.y - 1][self.player.x] == 0:
-                self.player.y -= 1
-                time.sleep(0.1)
-
-        if button_b.value() == 0:
-            if self.maze[self.player.y + 1][self.player.x] == 0:
-                self.player.y += 1
-                time.sleep(0.1)
-
-        if self.player.x == self.end_location[1] and self.player.y == self.end_location[0]:
-            self.complete = True
+                    # Draw the player path
+                    display.set_pen(PATH)
+                    display.rectangle(x, y, wall_size, wall_size)
 
 
 class Player(object):
-    # The player object.
-    # Stores the current location of the player in the maze.
     def __init__(self, x, y, colour):
         self.x = x
         self.y = y
-        self.size = 10
         self.colour = colour
 
+    def position(self, x, y):
+        self.x = x
+        self.y = y
 
-g = Game()
+    def update(self, maze):
+        # Read the player's input
+
+        if button_c.value() == 0 and maze[self.y][self.x - 1] != 1:
+            self.x -= 1
+            time.sleep(MOVEMENT_SLEEP)
+
+        elif button_z.value() == 0 and maze[self.y][self.x + 1] != 1:
+            self.x += 1
+            time.sleep(MOVEMENT_SLEEP)
+
+        elif button_a.value() == 0 and maze[self.y - 1][self.x] != 1:
+            self.y -= 1
+            time.sleep(MOVEMENT_SLEEP)
+
+        elif button_b.value() == 0 and maze[self.y + 1][self.x] != 1:
+            self.y += 1
+            time.sleep(MOVEMENT_SLEEP)
+
+        maze[self.y][self.x] = 2
+
+    def draw(self, display):
+        display.set_pen(self.colour)
+        display.rectangle(self.x * wall_separation + offset_x,
+                          self.y * wall_separation + offset_y,
+                          wall_size, wall_size)
+
+
+def build_maze():
+    global wall_separation
+    global wall_size
+    global offset_x
+    global offset_y
+    global start
+    global goal
+
+    difficulty = int(level * DIFFICULT_SCALE)
+    width = random.randrange(MIN_MAZE_WIDTH, MAX_MAZE_WIDTH)
+    height = random.randrange(MIN_MAZE_HEIGHT, MAX_MAZE_HEIGHT)
+    builder.build(width + difficulty, height + difficulty)
+
+    wall_separation = min(HEIGHT // builder.grid_rows,
+                          WIDTH // builder.grid_columns)
+    wall_size = wall_separation - WALL_GAP
+
+    offset_x = (WIDTH - (builder.grid_columns * wall_separation) + WALL_GAP) // 2
+    offset_y = (HEIGHT - (builder.grid_rows * wall_separation) + WALL_GAP) // 2
+
+    start = Position(1, builder.grid_rows - 2)
+    goal = Position(builder.grid_columns - 2, 1)
+
+
+# Create the maze builder and build the first maze
+builder = MazeBuilder()
+build_maze()
+
+# Create the player object
+player = Player(*start, PLAYER)
+
+# Turn on the display
+display.set_backlight(BRIGHTNESS)
+
+# Loop forever
 while True:
-    if not g.complete:
-        g.update()
-    g.draw()
+    if not complete:
+        # Update the player's position in the maze
+        player.update(builder.maze)
+
+        # Check if any player has reached the goal position
+        if player.x == goal.x and player.y == goal.y:
+            complete = True
+    else:
+        # Check for the player wanting to continue
+        if button_x.value() == 0:
+            complete = False
+            level += 1
+            build_maze()
+            player.position(*start)
+
+    # Clear the screen to the background colour
+    display.set_pen(BACKGROUND)
+    display.clear()
+
+    # Draw the maze walls
+    builder.draw(display)
+
+    # Draw the start location square
+    display.set_pen(RED)
+    display.rectangle(start.x * wall_separation + offset_x,
+                      start.y * wall_separation + offset_y,
+                      wall_size, wall_size)
+
+    # Draw the goal location square
+    display.set_pen(GREEN)
+    display.rectangle(goal.x * wall_separation + offset_x,
+                      goal.y * wall_separation + offset_y,
+                      wall_size, wall_size)
+
+    # Draw the player
+    player.draw(display)
+
+    # Display the level
+    display.set_pen(BLACK)
+    display.text(f"Lvl: {level}", 2 + TEXT_SHADOW, 2 + TEXT_SHADOW, WIDTH, 1)
+    display.set_pen(WHITE)
+    display.text(f"Lvl: {level}", 2, 2, WIDTH, 1)
+
+    if complete:
+        # Draw banner shadow
+        display.set_pen(BLACK)
+        display.rectangle(4, 94, WIDTH, 50)
+        # Draw banner
+        display.set_pen(PLAYER)
+        display.rectangle(0, 90, WIDTH, 50)
+
+        # Draw text shadow
+        display.set_pen(BLACK)
+        display.text("Maze Complete!", WIDTH // 6 + TEXT_SHADOW, 96 + TEXT_SHADOW, WIDTH, 3)
+        display.text("Press X to continue", WIDTH // 6 + 10 + TEXT_SHADOW, 120 + TEXT_SHADOW, WIDTH, 2)
+
+        # Draw text
+        display.set_pen(WHITE)
+        display.text("Maze Complete!", WIDTH // 6, 96, WIDTH, 3)
+        display.text("Press X to continue", WIDTH // 6 + 10, 120, WIDTH, 2)
+
+    # Update the screen
+    display.update()
