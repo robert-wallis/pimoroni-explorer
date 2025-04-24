@@ -28,7 +28,7 @@ It's split into three main sections for your convenience:
 
 # Explorer Library
 
-The [explorer library](examples/lib/explorer.py) is a wrapper around some of Explorer's particulars. It aims to get you set up with a PicoGraphics surface for drawing, and help you find the right pins for the many inputs and outputs.
+The [explorer library](../examples/lib/explorer.py) is a wrapper around some of Explorer's particulars. It aims to get you set up with a PicoGraphics surface for drawing, and help you find the right pins for the many inputs and outputs.
 
 ## Getting Started
 
