@@ -121,7 +121,7 @@ Then we chop them down to 5, 6 and 5 bits respectively:
 ```
 red = RRRRR
 green = GGGGGG
-blue = BBBBBB
+blue = BBBBB
 ```
 
 And stick them together:
